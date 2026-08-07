@@ -1,0 +1,73 @@
+{
+  "fixture_hash": "60e3a95992e3dd4786f8e858991bf8ca3cedff8831ae05ca93c42b2937c38421",
+  "meets_target": true,
+  "raw_context_bytes": 986077,
+  "raw_context_estimated_tokens": 246520,
+  "required_facts": [
+    "RENDERER=KNI",
+    "STORAGE=IndexedDB",
+    "COORDINATE_SYSTEM=legacy-preserved",
+    "TASK_ID=MAP-003",
+    "NEXT_STEP=texture-loading",
+    "EXPECTED_COORDINATE=12",
+    "FAILED_TEST=LegacyCoordinateTransform",
+    "Expected: 12",
+    "Actual: 0",
+    "src/map_loader.py"
+  ],
+  "runs": [
+    {
+      "byte_reduction_ratio": 0.0,
+      "latency_ms": 0.0,
+      "missing_required_facts": [],
+      "mode": "naive",
+      "raw_bytes": 986077,
+      "raw_estimated_tokens": 246520,
+      "reduction_ratio": 0.0,
+      "required_facts_retained": 10,
+      "returned_bytes": 986077,
+      "returned_estimated_tokens": 246520,
+      "tool_calls": 3
+    },
+    {
+      "byte_reduction_ratio": 0.9858935965446918,
+      "latency_ms": 186.858,
+      "missing_required_facts": [],
+      "mode": "safe",
+      "raw_bytes": 986077,
+      "raw_estimated_tokens": 246520,
+      "reduction_ratio": 0.9858916112282979,
+      "required_facts_retained": 10,
+      "returned_bytes": 13910,
+      "returned_estimated_tokens": 3478,
+      "tool_calls": 3
+    },
+    {
+      "byte_reduction_ratio": 0.9858935965446918,
+      "latency_ms": 188.166,
+      "missing_required_facts": [],
+      "mode": "balanced",
+      "raw_bytes": 986077,
+      "raw_estimated_tokens": 246520,
+      "reduction_ratio": 0.9858916112282979,
+      "required_facts_retained": 10,
+      "returned_bytes": 13910,
+      "returned_estimated_tokens": 3478,
+      "tool_calls": 3
+    },
+    {
+      "byte_reduction_ratio": 0.9858935965446918,
+      "latency_ms": 183.194,
+      "missing_required_facts": [],
+      "mode": "max",
+      "raw_bytes": 986077,
+      "raw_estimated_tokens": 246520,
+      "reduction_ratio": 0.9858916112282979,
+      "required_facts_retained": 10,
+      "returned_bytes": 13910,
+      "returned_estimated_tokens": 3478,
+      "tool_calls": 3
+    }
+  ],
+  "token_metric": "estimated_tokens"
+}

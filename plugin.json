@@ -1,0 +1,4 @@
+{
+  "name": "comptext-conductor-max",
+  "description": "Local-first Context Broker companion for Conductor and Antigravity CLI: compute before context."
+}
