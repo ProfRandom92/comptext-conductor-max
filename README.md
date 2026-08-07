@@ -1,8 +1,5 @@
-<h1 align="center">CompText Conductor Max</h1>
-
 <p align="center">
-  <strong>Local-first Context Broker MCP companion for Google Conductor and Antigravity CLI.</strong><br/>
-  <em>Compute before context.</em>
+  <img src="docs/assets/brand/readme-header.svg" alt="CompText Conductor Max — Compute before context" width="100%" />
 </p>
 
 <p align="center">
@@ -18,13 +15,28 @@
   <img alt="MIT License" src="https://img.shields.io/badge/license-MIT-blue" />
 </p>
 
-> **Status:** production-oriented first version on `feature/context-broker-mcp`. The evidence badges above describe the verified feature-branch snapshot; benchmark values are reproducible fixture results, not universal savings guarantees.
+<p align="center">
+  <strong>Local-first Context Broker MCP companion for Google Conductor and Antigravity CLI.</strong><br/>
+  Deterministic retrieval, bounded context, summary-first diffs/logs, checkpoints, and measurable context reduction.
+</p>
+
+<p align="center">
+  <a href="#architecture">Architecture</a> ·
+  <a href="#benchmark-snapshot">Benchmark</a> ·
+  <a href="#context-budget-profiles">Profiles</a> ·
+  <a href="#mcp-tool-matrix">MCP tools</a> ·
+  <a href="#cryptographic-integrity--provenance">Integrity</a> ·
+  <a href="#security">Security</a> ·
+  <a href="#installation">Install</a>
+</p>
+
+> **Status:** production-oriented first version on `feature/context-broker-mcp`. Evidence below describes the verified feature-branch snapshot. Benchmark values are reproducible fixture measurements, not universal savings guarantees.
 
 ## Problem
 
 Large agentic coding sessions waste model context on whole repositories, repeated specifications, complete diffs, generated files, and thousands of build-log lines. Prompt shortening alone does not solve this because once raw tool output reaches the model, the context cost has already been paid.
 
-CompText Conductor Max moves deterministic work outside the LLM context: safe indexing, ranking, slice selection, Git-diff classification, log reduction, checkpointing, content-addressed caching, and accounting. The MCP returns only the information selected for the current task.
+**CompText Conductor Max moves deterministic work outside the LLM context.** It performs safe indexing, ranking, slice selection, Git-diff classification, log reduction, checkpointing, content-addressed caching, and accounting locally, then returns only the information selected for the current task.
 
 ## Architecture
 
@@ -36,7 +48,7 @@ flowchart LR
 
     MCP --> TI["Track Index"]
     MCP --> RI["Repository Index"]
-    MCP --> GI["Git Index / Diff Engine"]
+    MCP --> GI["Git Diff Engine"]
     MCP --> LR["Log / Result Reducer"]
     MCP --> CP["Checkpoints + SHA-256 Cache"]
 
@@ -48,14 +60,14 @@ flowchart LR
 
     RET --> BUD["Context Budget Engine"]
     BUD --> OUT["Minimal useful context"]
-    OUT --> MODEL["Gemini / AGY"]
+    OUT --> MODEL["Model / Agent"]
 ```
 
-Conductor is not forked. Its track files are detected and read without modification. The broker is local-first and the default MCP transport is stdio.
+Conductor is **not forked**. Its track files are detected and read without modification. The broker is local-first and the default MCP transport is stdio.
 
 See [`docs/architecture.md`](docs/architecture.md) for component boundaries and data flow.
 
-## Compute before context
+### Compute before context
 
 ```mermaid
 flowchart TD
@@ -65,7 +77,7 @@ flowchart TD
     RANK --> BUDGET{"Context budget"}
     BUDGET -->|relevant| SLICE["Bounded code/spec/log slices"]
     BUDGET -->|generated / ignored / secret / noise| OMIT["Keep local · do not return"]
-    SLICE --> MCP["MCP structured response"]
+    SLICE --> MCP["Structured MCP response"]
     MCP --> LLM["Model context"]
     LLM --> NEED{"Enough for correctness?"}
     NEED -->|yes| WORK["Continue task"]
@@ -73,7 +85,7 @@ flowchart TD
     TARGET --> SEC
 ```
 
-The primary gain comes from **selection and local computation**, not compact prose:
+The gain comes from **selection and local computation**, not compact prose:
 
 - repository files are indexed into bounded slices instead of returned wholesale;
 - deterministic lexical, symbol, Git, and Conductor signals rank candidate slices;
@@ -82,9 +94,9 @@ The primary gain comes from **selection and local computation**, not compact pro
 - checkpoints replace repeated chat-history replay for agent handoffs;
 - SHA-256 keyed cache entries avoid reprocessing unchanged content;
 - generated files, binaries, ignored paths, and likely secrets are excluded by default;
-- hard context budgets apply after ranking and report critical omissions instead of silently guessing.
+- hard budgets report critical omissions instead of silently guessing.
 
-If bounded retrieval is insufficient for correctness, the rules explicitly permit targeted or full reads of the required file or range.
+If bounded retrieval is insufficient for correctness, the rules explicitly permit a targeted or full read of the required file or range.
 
 ## Benchmark snapshot
 
@@ -96,23 +108,24 @@ The committed benchmark is **synthetic and reproducible**. Seed `20260807` gener
 
 | Metric | Naive full-context | Conductor Max BALANCED | Delta |
 | --- | ---: | ---: | ---: |
-| Raw / returned bytes | 986,077 | 13,910 | **-98.59% by delivered token estimate** |
+| Raw / returned bytes | 986,077 | 13,910 | — |
 | `estimated_tokens` | 246,520 | 3,478 | **-243,042** |
-| Required benchmark facts missing | 0 / 10 | 0 / 10 | **no loss in fixture** |
+| Measured token reduction | — | **98.59%** | — |
+| Required fixture facts missing | 0 / 10 | 0 / 10 | **no loss in fixture** |
 
 <p align="center">
   <img src="docs/assets/benchmark-context.svg" alt="Measured benchmark showing 246,520 estimated tokens for naive full context and 3,478 for CompText Conductor Max" width="900" />
 </p>
 
-SAFE and MAX produced the same returned size in this fixture because every task-relevant fact fit below the smallest profile ceiling. This does **not** mean the profiles are equivalent on larger relevant working sets.
+SAFE, BALANCED, and MAX returned the same amount in this fixture because every task-relevant fact fit below the smallest profile ceiling. This does **not** mean the profiles are equivalent on larger relevant working sets.
 
-Run the benchmark yourself:
+Run it yourself:
 
 ```bash
 ct-conductor benchmark --output benchmarks/results/latest.json --seed 20260807
 ```
 
-The benchmark gate requires BALANCED or MAX to reduce delivered context by at least 50% while retaining every manifest-required fact. Exact measurements are committed in [`benchmarks/results/latest.json`](benchmarks/results/latest.json).
+The benchmark gate requires BALANCED or MAX to reduce delivered context by at least 50% while retaining every manifest-required fact. Exact measurements are committed in [`benchmarks/results/latest.json`](benchmarks/results/latest.json) and explained in [`docs/benchmark.md`](docs/benchmark.md).
 
 ## Context budget profiles
 
@@ -141,16 +154,16 @@ A caller may request a smaller budget. A larger call-time value never raises the
 
 ## MCP tool matrix
 
-Exactly six primary tools are exposed to keep MCP schema overhead bounded.
+Exactly six primary tools are exposed to keep permanent MCP schema overhead bounded.
 
-| Tool | Local computation | Model-facing result | Primary token-saving mechanism |
+| Tool | Local computation | Model-facing result | Primary reduction mechanism |
 | --- | --- | --- | --- |
 | `ct_context` | Track/spec/plan/source/Git assembly + scoring | Bounded task context | Relevance selection |
 | `ct_search` | Safe index search + ranking | Top-K slices | Partial reads instead of full files |
 | `ct_diff` | Git parsing + classification | Summary or one bounded hunk | Summary-first / delta-first |
 | `ct_result` | Build/test/lint/security-log parsing | Failures + diagnostics + likely files | Noise removal before context |
 | `ct_checkpoint` | Canonical state serialization + SHA-256 | Versioned continuation state | Checkpoint instead of history replay |
-| `ct_stats` | Local accounting | Reduction/cache/read metrics | Measured evidence, not a heuristic claim |
+| `ct_stats` | Local accounting | Reduction/cache/read metrics | Measured evidence |
 
 Index, cache, benchmark, and doctor operations remain CLI concerns rather than expanding the permanent MCP schema.
 
@@ -164,7 +177,7 @@ flowchart LR
     FH --> CACHE["Content-addressed cache key"]
 
     DIFF["Git diff content"] --> DH["SHA-256"]
-    DH --> DINV["Diff cache identity / invalidation"]
+    DH --> DINV["Diff identity / invalidation"]
 
     LOG["Local log content"] --> LH["SHA-256"]
     LH --> LINV["Log identity / reprocessing control"]
@@ -176,15 +189,15 @@ flowchart LR
     BH --> PROOF["Reproducible fixture provenance"]
 ```
 
-| Object | Cryptographic primitive | Purpose |
+| Object | Primitive | Purpose |
 | --- | --- | --- |
 | Repository content | SHA-256 | Detect content changes and safely reuse cached analysis |
 | Diff state | SHA-256 | Stable identity for unchanged diff inputs |
-| Logs | SHA-256 | Detect repeated/changed local result inputs |
+| Logs | SHA-256 | Detect repeated or changed local result inputs |
 | Checkpoint canonical JSON | SHA-256 | Deterministic, reproducible checkpoint identity |
-| Benchmark fixture | SHA-256 | Prove that reported measurements refer to the same generated fixture |
+| Benchmark fixture | SHA-256 | Bind reported measurements to the generated fixture |
 
-> **Security boundary:** SHA-256 here provides collision-resistant content identity and integrity/change detection. v0.1 does **not** claim digital signatures, author authenticity, encryption, HMAC authentication, or a PKI trust chain. Those would require explicit keys and a separate signed-provenance design.
+> **Security boundary:** SHA-256 here provides collision-resistant content identity and integrity/change detection. v0.1 does **not** claim digital signatures, author authenticity, encryption, HMAC authentication, or a PKI trust chain. Those require explicit keys and a separate signed-provenance design.
 
 This distinction is deliberate: cryptographic hashes make the local processing pipeline reproducible and stale-cache resistant without pretending that a hash alone proves who created an artifact.
 
@@ -201,7 +214,7 @@ conductor/
       metadata.json
 ```
 
-The broker detects this structure, extracts the first unchecked plan item as the current step, and uses relevant specification/plan slices as high-priority context. A conservative fallback looks for equivalent `spec.md` / `plan.md` pairs beneath `conductor/`. Conductor files remain read-only.
+The broker detects this structure, extracts the first unchecked plan item as the current step, and gives relevant specification/plan slices high priority. A conservative fallback looks for equivalent `spec.md` / `plan.md` pairs beneath `conductor/`. Conductor files remain read-only.
 
 ```mermaid
 sequenceDiagram
@@ -212,7 +225,7 @@ sequenceDiagram
 
     A->>C: Start current implementation step
     C->>M: ct_context(track, task, budget)
-    M->>R: Index/hash/rank locally
+    M->>R: Index / hash / rank locally
     R-->>M: Candidate slices + Git state
     M-->>C: Minimal useful context
     C->>M: ct_diff / ct_result as needed
@@ -226,21 +239,6 @@ Example:
 ```bash
 ct-conductor context --root . --track demo --task "implement current plan step" --profile balanced
 ```
-
-## Antigravity setup
-
-The companion bundle follows the Antigravity plugin shape validated during the `2026-08-07` research pass:
-
-```text
-plugin.json
-mcp_config.json
-rules/comptext-conductor-max.md
-skills/conductor-max/SKILL.md
-```
-
-`mcp_config.json` registers a local stdio server named `comptext-conductor-max` and starts `ct-conductor-mcp`. The server uses the process working directory as project root unless `CT_CONDUCTOR_ROOT` is set. If the host launches MCP servers outside the active workspace, set that environment variable or configure an appropriate `cwd`.
-
-No permanent hook is required in v0.1; avoiding one keeps standing instruction overhead small.
 
 ## Installation
 
@@ -258,6 +256,21 @@ python -m pip install -e '.[dev]'
 ```
 
 The installation exposes `ct-conductor` and `ct-conductor-mcp` on `PATH`.
+
+### Antigravity setup
+
+The companion bundle follows the Antigravity plugin shape validated during the `2026-08-07` research pass:
+
+```text
+plugin.json
+mcp_config.json
+rules/comptext-conductor-max.md
+skills/conductor-max/SKILL.md
+```
+
+`mcp_config.json` registers a local stdio server named `comptext-conductor-max` and starts `ct-conductor-mcp`. The server uses the process working directory as project root unless `CT_CONDUCTOR_ROOT` is set. If the host launches MCP servers outside the active workspace, set that variable or configure an appropriate `cwd`.
+
+No permanent hook is required in v0.1; avoiding one keeps standing instruction overhead small.
 
 ## Security
 
@@ -296,7 +309,7 @@ Secret detection is defense in depth, not a replacement for a dedicated reposito
 
 ## Verification
 
-Final feature-branch quality gate:
+Final implementation quality gate before the branding-only README changes:
 
 | Gate | Result |
 | --- | --- |
@@ -310,7 +323,7 @@ Final feature-branch quality gate:
 | Synthetic benchmark | **98.59% reduction, 0/10 facts missing** |
 | Bandit | **0 High / 0 Medium** |
 
-The full review trail is in [`docs/code-review.md`](docs/code-review.md) and [`docs/security-review.md`](docs/security-review.md).
+The branding update changes only README documentation/assets; it does not modify the runtime implementation. The full review trail is in [`docs/code-review.md`](docs/code-review.md) and [`docs/security-review.md`](docs/security-review.md).
 
 ## Troubleshooting
 
@@ -342,8 +355,12 @@ python -m build
 ct-conductor benchmark --output benchmarks/results/latest.json --seed 20260807
 ```
 
-The implementation plan and design record are under [`docs/superpowers/`](docs/superpowers/); final review evidence is in [`docs/code-review.md`](docs/code-review.md) and [`docs/security-review.md`](docs/security-review.md). The quality standard is evidence before success claims: tests, static checks, MCP smoke tests, integration fixtures, security review, and a fresh benchmark must run on the final implementation state.
+The implementation plan and design record are under [`docs/superpowers/`](docs/superpowers/); final review evidence is in [`docs/code-review.md`](docs/code-review.md) and [`docs/security-review.md`](docs/security-review.md).
 
 ## License
 
 CompText Conductor Max is released under the MIT License. External projects listed in [`docs/research.md`](docs/research.md) were used as documentation/architecture references only; their licenses remain their own.
+
+<p align="center">
+  <img src="docs/assets/brand/readme-footer.svg" alt="CompText Conductor Max — local-first, bounded, deterministic" width="100%" />
+</p>
