@@ -6,11 +6,35 @@ from pathlib import Path
 
 from pathspec import PathSpec
 
-_SECRET_GLOBS = (".env", ".env.*", "*.pem", "*.key", "id_rsa", "id_rsa.*", "id_ed25519", "id_ed25519.*", "credentials*", "secrets*")
-_DENY_DIRS = {".git", ".venv", "venv", "node_modules", "dist", "build", "__pycache__", ".comptext"}
+_SECRET_GLOBS = (
+    ".env",
+    ".env.*",
+    "*.pem",
+    "*.key",
+    "id_rsa",
+    "id_rsa.*",
+    "id_ed25519",
+    "id_ed25519.*",
+    "credentials*",
+    "secrets*",
+)
+_DENY_DIRS = {
+    ".git",
+    ".venv",
+    "venv",
+    "node_modules",
+    "dist",
+    "build",
+    "__pycache__",
+    ".comptext",
+}
 _SECRET_PATTERNS = (
     re.compile(r"-----BEGIN [A-Z0-9 ]*PRIVATE KEY-----"),
-    re.compile(r"\b(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?[A-Za-z0-9_./+=-]{16,}", re.IGNORECASE),
+    re.compile(
+        r"\b(?:api[_-]?key|secret|token|password)\s*[:=]\s*['\"]?"
+        r"[A-Za-z0-9_./+=-]{16,}",
+        re.IGNORECASE,
+    ),
     re.compile(r"\b(?:gh[pousr]_[A-Za-z0-9]{20,}|sk-[A-Za-z0-9_-]{20,})\b"),
 )
 
@@ -59,7 +83,9 @@ class SecurityPolicy:
             relative = resolved.relative_to(self.root)
         except ValueError as exc:
             raise ValueError("path escapes project root") from exc
-        if ".git" in relative.parts or any(fnmatch.fnmatch(relative.name, pattern) for pattern in _SECRET_GLOBS):
+        if ".git" in relative.parts or any(
+            fnmatch.fnmatch(relative.name, pattern) for pattern in _SECRET_GLOBS
+        ):
             raise ValueError("sensitive path is not allowed")
         if not resolved.is_file():
             raise ValueError("path is not a file")
@@ -79,7 +105,8 @@ class SecurityPolicy:
             return None
         candidate = path if path.is_absolute() else self.root / path
         try:
-            raw = candidate.read_bytes()[:max_bytes]
+            with candidate.open("rb") as handle:
+                raw = handle.read(max_bytes)
         except OSError:
             return None
         if b"\x00" in raw:
