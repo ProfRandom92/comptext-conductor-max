@@ -44,6 +44,7 @@ class Retriever:
         changed_files: set[str],
         failure_files: set[str],
         critical_paths: set[str],
+        preferred_paths: set[str],
     ) -> tuple[int, tuple[str, ...]]:
         haystack = _tokens(item.text)
         path_tokens = _tokens(str(PurePosixPath(item.path)))
@@ -59,18 +60,32 @@ class Retriever:
             reasons.append(f"path-overlap:{path_overlap}")
         if symbol_overlap:
             reasons.append(f"symbol-overlap:{symbol_overlap}")
-        if item.kind in {"spec", "plan"}:
+        if item.kind in {"spec", "plan", "track_index"}:
             score += 8
             reasons.append(f"conductor-{item.kind}")
-        if item.kind == "source":
+        elif item.kind == "project_context":
+            score += 6
+            reasons.append("conductor-project-context")
+        elif item.kind == "styleguide":
+            score += 4
+            reasons.append("conductor-styleguide")
+        elif item.kind == "metadata":
+            score += 3
+            reasons.append("conductor-metadata")
+        elif item.kind == "source":
             score += 2
+        if item.path in preferred_paths:
+            score += 18
+            reasons.append("preferred-context")
         if item.path in changed_files:
             score += 25
             reasons.append("changed-file")
         if item.path in failure_files:
             score += 40
             reasons.append("failing-test")
-        if item.path in critical_paths and (overlap or path_overlap or symbol_overlap or item.start_line == 1):
+        if item.path in critical_paths and (
+            overlap or path_overlap or symbol_overlap or item.start_line == 1
+        ):
             score += 100
             reasons.append("critical")
         return score, tuple(reasons)
@@ -86,15 +101,22 @@ class Retriever:
         changed_files: set[str] | None = None,
         failure_files: set[str] | None = None,
         critical_paths: set[str] | None = None,
+        preferred_paths: set[str] | None = None,
     ) -> SearchResponse:
         changed = changed_files or set()
         failures = failure_files or set()
         critical = critical_paths or set()
+        preferred = preferred_paths or set()
         query_tokens = _tokens(query)
         ranked: list[tuple[int, IndexedSlice, tuple[str, ...]]] = []
         for item in index.slices:
             score, reasons = self._score(
-                item, query_tokens, changed_files=changed, failure_files=failures, critical_paths=critical
+                item,
+                query_tokens,
+                changed_files=changed,
+                failure_files=failures,
+                critical_paths=critical,
+                preferred_paths=preferred,
             )
             if score > 2 or "critical" in reasons:
                 ranked.append((score, item, reasons))
@@ -133,7 +155,11 @@ class Retriever:
         return SearchResponse(
             results=tuple(selected),
             returned_lines=lines_used,
-            returned_tokens=TokenCount(tokens_used if selected else total.value, False, "estimated_tokens"),
+            returned_tokens=TokenCount(
+                tokens_used if selected else total.value,
+                False,
+                "estimated_tokens",
+            ),
             budget_exceeded=bool(omitted_critical),
             omitted_critical=tuple(sorted(set(omitted_critical))),
         )
