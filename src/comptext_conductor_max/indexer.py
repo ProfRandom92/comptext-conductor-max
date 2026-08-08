@@ -8,8 +8,25 @@ from .cache import ContentCache
 from .models import IndexedSlice, RepositoryIndex
 from .security import SecurityPolicy
 
-_GENERATED_NAMES = {"package-lock.json", "pnpm-lock.yaml", "yarn.lock", "uv.lock", "poetry.lock"}
-_SYMBOL = re.compile(r"^\s*(?:def|class|async\s+def|function|interface|struct|enum|fn)\s+([A-Za-z_][A-Za-z0-9_]*)", re.MULTILINE)
+_GENERATED_NAMES = {
+    "package-lock.json",
+    "pnpm-lock.yaml",
+    "yarn.lock",
+    "uv.lock",
+    "poetry.lock",
+}
+_PROJECT_CONTEXT_NAMES = {
+    "product.md",
+    "product-guidelines.md",
+    "tech-stack.md",
+    "workflow.md",
+    "tracks.md",
+}
+_SYMBOL = re.compile(
+    r"^\s*(?:def|class|async\s+def|function|interface|struct|enum|fn)\s+"
+    r"([A-Za-z_][A-Za-z0-9_]*)",
+    re.MULTILINE,
+)
 
 
 class RepositoryIndexer:
@@ -30,13 +47,19 @@ class RepositoryIndexer:
 
     @staticmethod
     def _kind(path: str) -> str:
-        if "/conductor/tracks/" in f"/{path}" or path.startswith("conductor/"):
+        if path.startswith("conductor/code_styleguides/") and path.endswith(".md"):
+            return "styleguide"
+        if path.startswith("conductor/tracks/"):
             if path.endswith("spec.md"):
                 return "spec"
             if path.endswith("plan.md"):
                 return "plan"
             if path.endswith("metadata.json"):
                 return "metadata"
+            if path.endswith("index.md"):
+                return "track_index"
+        if path.startswith("conductor/") and Path(path).name in _PROJECT_CONTEXT_NAMES:
+            return "project_context"
         if "/test" in f"/{path}" or path.startswith("tests/"):
             return "test"
         return "source"
@@ -48,7 +71,9 @@ class RepositoryIndexer:
             if not path.is_file() or path.is_symlink():
                 continue
             rel = path.relative_to(self.root).as_posix()
-            if path.name in _GENERATED_NAMES or any(part.startswith(".ct-cache") for part in path.relative_to(self.root).parts):
+            if path.name in _GENERATED_NAMES or any(
+                part.startswith(".ct-cache") for part in path.relative_to(self.root).parts
+            ):
                 continue
             if not self.policy.is_path_allowed(path):
                 continue
@@ -57,7 +82,7 @@ class RepositoryIndexer:
                 continue
             files += 1
             content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
-            key = f"index:v1:{rel}:{content_hash}:{self.window_lines}"
+            key = f"index:v2:{rel}:{content_hash}:{self.window_lines}"
             cached = self.cache.get(key)
             if isinstance(cached, list):
                 slices.extend(IndexedSlice.model_validate(item) for item in cached)
