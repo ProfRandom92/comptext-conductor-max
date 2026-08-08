@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+import math
 import re
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import PurePosixPath
 
@@ -11,8 +13,12 @@ from .tokens import TokenCount, estimate_tokens
 _TOKEN = re.compile(r"[a-z0-9]+")
 
 
+def _token_list(text: str) -> list[str]:
+    return _TOKEN.findall(text.lower().replace("_", " ").replace("-", " "))
+
+
 def _tokens(text: str) -> set[str]:
-    return set(_TOKEN.findall(text.lower().replace("_", " ").replace("-", " ")))
+    return set(_token_list(text))
 
 
 @dataclass(frozen=True, slots=True)
@@ -37,10 +43,43 @@ class SearchResponse:
 
 class Retriever:
     @staticmethod
+    def _bm25_points(
+        document_tokens: list[str],
+        query_tokens: set[str],
+        *,
+        document_frequency: Counter[str],
+        document_count: int,
+        average_length: float,
+    ) -> int:
+        if not query_tokens or not document_tokens or document_count <= 0:
+            return 0
+        frequencies = Counter(document_tokens)
+        length = len(document_tokens)
+        k1 = 1.5
+        b = 0.75
+        score = 0.0
+        for term in sorted(query_tokens):
+            frequency = frequencies.get(term, 0)
+            if frequency <= 0:
+                continue
+            df = document_frequency.get(term, 0)
+            inverse_frequency = math.log(
+                1.0 + (document_count - df + 0.5) / (df + 0.5)
+            )
+            normalization = k1 * (
+                1.0 - b + b * (length / max(1.0, average_length))
+            )
+            score += inverse_frequency * (
+                frequency * (k1 + 1.0) / (frequency + normalization)
+            )
+        return max(0, round(score * 100))
+
+    @staticmethod
     def _score(
         item: IndexedSlice,
         query_tokens: set[str],
         *,
+        bm25_points: int,
         changed_files: set[str],
         failure_files: set[str],
         critical_paths: set[str],
@@ -52,8 +91,10 @@ class Retriever:
         overlap = len(query_tokens & haystack)
         path_overlap = len(query_tokens & path_tokens)
         symbol_overlap = len(query_tokens & symbol_tokens)
-        score = overlap * 10 + path_overlap * 12 + symbol_overlap * 14
+        score = bm25_points + overlap * 10 + path_overlap * 12 + symbol_overlap * 14
         reasons: list[str] = []
+        if bm25_points:
+            reasons.append(f"bm25:{bm25_points}")
         if overlap:
             reasons.append(f"query-overlap:{overlap}")
         if path_overlap:
@@ -108,11 +149,26 @@ class Retriever:
         critical = critical_paths or set()
         preferred = preferred_paths or set()
         query_tokens = _tokens(query)
+        documents = [_token_list(item.text) for item in index.slices]
+        document_frequency: Counter[str] = Counter()
+        for tokens in documents:
+            document_frequency.update(set(tokens) & query_tokens)
+        average_length = (
+            sum(len(tokens) for tokens in documents) / len(documents) if documents else 0.0
+        )
         ranked: list[tuple[int, IndexedSlice, tuple[str, ...]]] = []
-        for item in index.slices:
+        for item, document_tokens in zip(index.slices, documents, strict=True):
+            bm25_points = self._bm25_points(
+                document_tokens,
+                query_tokens,
+                document_frequency=document_frequency,
+                document_count=len(documents),
+                average_length=average_length,
+            )
             score, reasons = self._score(
                 item,
                 query_tokens,
+                bm25_points=bm25_points,
                 changed_files=changed,
                 failure_files=failures,
                 critical_paths=critical,
