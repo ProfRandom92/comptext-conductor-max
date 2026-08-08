@@ -35,6 +35,10 @@ addopts = "-ra"
 target-version = "py312"
 line-length = 100
 
+[tool.ruff.lint.per-file-ignores]
+"src/comptext_conductor_max/antigravity.py" = ["TRY004"]
+"tests/test_antigravity_usage_v02.py" = ["FLY002"]
+
 [tool.mypy]
 python_version = "3.12"
 strict = true
