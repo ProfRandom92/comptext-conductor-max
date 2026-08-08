@@ -77,15 +77,29 @@ class RepositoryIndexer:
                 continue
             if not self.policy.is_path_allowed(path):
                 continue
+            try:
+                stat = path.stat()
+            except OSError:
+                continue
+            stat_key = (
+                f"index-stat:v1:{rel}:{stat.st_size}:{stat.st_mtime_ns}:"
+                f"{self.window_lines}:{self.max_file_bytes}"
+            )
+            stat_cached = self.cache.get(stat_key)
+            if isinstance(stat_cached, list):
+                files += 1
+                slices.extend(IndexedSlice.model_validate(item) for item in stat_cached)
+                continue
             text = self.policy.safe_text(path, self.max_file_bytes)
             if text is None:
                 continue
             files += 1
             content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
-            key = f"index:v2:{rel}:{content_hash}:{self.window_lines}"
-            cached = self.cache.get(key)
-            if isinstance(cached, list):
-                slices.extend(IndexedSlice.model_validate(item) for item in cached)
+            content_key = f"index:v2:{rel}:{content_hash}:{self.window_lines}"
+            content_cached = self.cache.get(content_key)
+            if isinstance(content_cached, list):
+                self.cache.put(stat_key, content_cached)
+                slices.extend(IndexedSlice.model_validate(item) for item in content_cached)
                 continue
             lines = text.splitlines()
             file_slices: list[IndexedSlice] = []
@@ -106,6 +120,8 @@ class RepositoryIndexer:
                         symbols=symbols,
                     )
                 )
-            self.cache.put(key, [item.model_dump(mode="json") for item in file_slices])
+            serialized = [item.model_dump(mode="json") for item in file_slices]
+            self.cache.put(content_key, serialized)
+            self.cache.put(stat_key, serialized)
             slices.extend(file_slices)
         return RepositoryIndex(root=str(self.root), slices=tuple(slices), file_count=files)
