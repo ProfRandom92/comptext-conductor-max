@@ -4,6 +4,7 @@ import json
 import platform
 import subprocess
 import tempfile
+from dataclasses import asdict
 from pathlib import Path
 from typing import Annotated
 
@@ -11,6 +12,7 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+from .antigravity import run_headless_probe
 from .benchmark import generate_fixture, run_benchmark, write_report
 from .broker import ContextBroker
 from .config import ProfileName
@@ -35,7 +37,9 @@ def doctor(root: RootOption = Path(".")) -> None:
     """Check local runtime, repository, Conductor, and MCP prerequisites."""
     canonical = root.resolve()
     tracks = list((canonical / "conductor" / "tracks").glob("*/spec.md"))
-    git_ok = subprocess.run(["git", "--version"], capture_output=True, text=True, check=False).returncode == 0
+    git_ok = subprocess.run(
+        ["git", "--version"], capture_output=True, text=True, check=False
+    ).returncode == 0
     table = Table(title="CompText Conductor Max")
     table.add_column("Check")
     table.add_column("Result")
@@ -64,7 +68,9 @@ def context(
     root: RootOption = Path("."),
 ) -> None:
     """Assemble bounded context for a Conductor implementation step."""
-    result = ContextBroker(root).context(track=track, task=task, profile=profile, budget=budget)
+    result = ContextBroker(root).context(
+        track=track, task=task, profile=profile, budget=budget
+    )
     console.print(result.content)
     console.print(
         f"\n[{result.returned_tokens.metric}: {result.returned_tokens.value}; budget: {result.budget}; "
@@ -78,11 +84,28 @@ def stats(root: RootOption = Path(".")) -> None:
     console.print_json(json.dumps(ContextBroker(root).stats_snapshot()))
 
 
+@app.command("agy-probe")
+def agy_probe(root: RootOption = Path(".")) -> None:
+    """Probe Antigravity headless stream-json support and report host token usage."""
+    result = run_headless_probe(root)
+    payload: dict[str, object] = {
+        "available": result.available,
+        "usage_source": "antigravity_result_usage" if result.usage is not None else None,
+        "usage": asdict(result.usage) if result.usage is not None else None,
+        "error": result.error,
+    }
+    console.print_json(json.dumps(payload))
+    if result.usage is None:
+        raise typer.Exit(code=2)
+
+
 @cache_app.command("status")
 def cache_status(root: RootOption = Path(".")) -> None:
     broker = ContextBroker(root)
     status = broker.cache.status()
-    console.print_json(json.dumps({"entries": status.entries, "hits": status.hits, "misses": status.misses}))
+    console.print_json(
+        json.dumps({"entries": status.entries, "hits": status.hits, "misses": status.misses})
+    )
 
 
 @cache_app.command("clear")
