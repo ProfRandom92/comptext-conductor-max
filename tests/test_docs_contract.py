@@ -22,9 +22,19 @@ def test_required_documentation_exists():
 def test_readme_has_required_sections_and_measured_benchmark_values():
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     for heading in (
-        "## Problem", "## Architecture", "## How it reduces context", "## Installation",
-        "## Antigravity setup", "## Conductor setup", "## MCP tools", "## Profiles",
-        "## Benchmarks", "## Security", "## Troubleshooting", "## Development", "## License",
+        "## Problem",
+        "## Architecture",
+        "### Compute before context",
+        "## Benchmark snapshot",
+        "## Context budget profiles",
+        "## MCP tool matrix",
+        "## Conductor integration",
+        "## Installation",
+        "### Antigravity setup",
+        "## Security",
+        "## Troubleshooting",
+        "## Development",
+        "## License",
     ):
         assert heading in readme
     report = json.loads((ROOT / "benchmarks/results/latest.json").read_text(encoding="utf-8"))
@@ -38,7 +48,15 @@ def test_readme_has_required_sections_and_measured_benchmark_values():
 
 
 def test_docs_do_not_restate_old_unverified_94_percent_claim():
-    docs = "\n".join(path.read_text(encoding="utf-8") for path in [ROOT / "README.md", *sorted((ROOT / "docs").glob("*.md")), ROOT / "AGENTS.md"] if path.is_file())
+    docs = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in [
+            ROOT / "README.md",
+            *sorted((ROOT / "docs").glob("*.md")),
+            ROOT / "AGENTS.md",
+        ]
+        if path.is_file()
+    )
     assert "94%" not in docs
     assert "94 %" not in docs
 
