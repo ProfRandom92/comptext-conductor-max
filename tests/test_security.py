@@ -34,3 +34,15 @@ def test_binary_and_secret_content_are_not_returned(tmp_path: Path):
     assert policy.safe_text(binary, max_bytes=1024) is None
     assert policy.safe_text(secret, max_bytes=1024) is None
     assert policy.safe_text(clean, max_bytes=1024) == "answer = 42\n"
+
+
+def test_safe_text_uses_bounded_file_read(tmp_path: Path, monkeypatch):
+    source = tmp_path / "large.txt"
+    source.write_text("x" * 4096, encoding="utf-8")
+    policy = SecurityPolicy.from_root(tmp_path)
+
+    def fail_read_bytes(self: Path) -> bytes:
+        raise AssertionError("unbounded Path.read_bytes() must not be used")
+
+    monkeypatch.setattr(Path, "read_bytes", fail_read_bytes)
+    assert policy.safe_text(source, max_bytes=64) == "x" * 64
