@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comptext-conductor-max"
-version = "0.1.0"
+version = "0.2.0"
 description = "Local-first Context Broker MCP companion for Conductor and Antigravity CLI"
 readme = "README.md"
 license = "MIT"
