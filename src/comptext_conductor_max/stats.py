@@ -19,6 +19,13 @@ class StatsSnapshot:
     log_bytes_avoided: int = 0
     retrieval_result_count: int = 0
     context_budget: int = 0
+    discovered_skill_count: int = 0
+    candidate_skill_count: int = 0
+    selected_skill_count: int = 0
+    metadata_bytes_considered: int = 0
+    metadata_bytes_returned: int = 0
+    skill_instruction_bytes_returned: int = 0
+    skill_resource_bytes_returned: int = 0
 
     @property
     def compression_ratio(self) -> float:
@@ -71,6 +78,28 @@ class StatsLedger:
 
     def record_log(self, *, raw_bytes: int, returned_bytes: int) -> None:
         self._replace(log_bytes_avoided=self._data.log_bytes_avoided + max(0, raw_bytes - returned_bytes))
+
+    def record_skills(
+        self,
+        *,
+        discovered: int = 0,
+        candidates: int = 0,
+        selected: int = 0,
+        metadata_considered: int = 0,
+        metadata_returned: int = 0,
+        instruction_returned: int = 0,
+        resource_returned: int = 0,
+    ) -> None:
+        d = self._data
+        self._replace(
+            discovered_skill_count=d.discovered_skill_count + max(0, discovered),
+            candidate_skill_count=d.candidate_skill_count + max(0, candidates),
+            selected_skill_count=d.selected_skill_count + max(0, selected),
+            metadata_bytes_considered=d.metadata_bytes_considered + max(0, metadata_considered),
+            metadata_bytes_returned=d.metadata_bytes_returned + max(0, metadata_returned),
+            skill_instruction_bytes_returned=d.skill_instruction_bytes_returned + max(0, instruction_returned),
+            skill_resource_bytes_returned=d.skill_resource_bytes_returned + max(0, resource_returned),
+        )
 
     def snapshot(self) -> StatsSnapshot:
         return self._data

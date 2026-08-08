@@ -23,10 +23,14 @@ def make_ref(item: IndexedSlice) -> str:
     return "ctref:v1:" + hashlib.sha256(payload.encode("utf-8")).hexdigest()
 
 
+class StaleRefError(KeyError):
+    pass
+
+
 def resolve_ref(index: RepositoryIndex, ref: str) -> IndexedSlice:
     if _REF.fullmatch(ref) is None:
         raise ValueError("invalid context ref")
     for item in index.slices:
         if make_ref(item) == ref:
             return item
-    raise KeyError("context ref is stale or not found")
+    raise StaleRefError("context ref is stale or not found")

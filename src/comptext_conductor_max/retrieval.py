@@ -115,6 +115,15 @@ class Retriever:
         elif item.kind == "metadata":
             score += 3
             reasons.append("conductor-metadata")
+        elif item.kind == "skill_metadata":
+            score += 15
+            reasons.append("skill-metadata")
+        elif item.kind == "skill_instruction":
+            score += 20
+            reasons.append("skill-instruction")
+        elif item.kind == "skill_resource":
+            score += 10
+            reasons.append("skill-resource")
         elif item.kind == "source":
             score += 2
         if item.path in preferred_paths:

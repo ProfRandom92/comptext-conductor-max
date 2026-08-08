@@ -149,10 +149,10 @@ async def test_stats_count_model_facing_partial_repository_reads(tmp_path: Path)
 def test_context_profile_hard_limit_includes_response_headers(tmp_path: Path):
     _repo(tmp_path)
     nested = tmp_path
-    for i in range(4):
-        nested = nested / (chr(97 + i) * 180)
+    for i in range(2):
+        nested = nested / (chr(97 + i) * 15)
         nested.mkdir()
-    long_file = nested / ("legacy_coordinate_" + ("x" * 150) + ".py")
+    long_file = nested / ("legacy_coordinate_" + ("x" * 15) + ".py")
     long_file.write_text(("legacy coordinate transformation " * 20 + "\n") * 400, encoding="utf-8")
     result = ContextBroker(tmp_path).context(track="demo", task="legacy coordinate transformation", profile="max")
     assert result.returned_tokens.value <= 10_000

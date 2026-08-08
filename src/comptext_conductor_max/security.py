@@ -3,6 +3,7 @@ from __future__ import annotations
 import fnmatch
 import re
 from pathlib import Path
+from typing import Any
 
 from pathspec import PathSpec
 
@@ -40,7 +41,7 @@ _SECRET_PATTERNS = (
 
 
 class SecurityPolicy:
-    def __init__(self, root: Path, ignore_spec: PathSpec) -> None:
+    def __init__(self, root: Path, ignore_spec: PathSpec[Any]) -> None:
         self.root = root.resolve()
         self.ignore_spec = ignore_spec
 
@@ -112,7 +113,7 @@ class SecurityPolicy:
         if b"\x00" in raw:
             return None
         try:
-            text = raw.decode("utf-8")
+            text = raw.decode("utf-8").replace("\r\n", "\n")
         except UnicodeDecodeError:
             return None
         return None if self.contains_secret(text) else text

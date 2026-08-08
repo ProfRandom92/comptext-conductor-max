@@ -13,6 +13,7 @@ from .indexer import RepositoryIndexer
 from .results import ResultAnalyzer
 from .retrieval import Retriever, SearchResponse
 from .security import SecurityPolicy
+from .skills import SkillCatalog
 from .state import ProjectStateStore
 from .stats import StatsLedger
 from .tokens import TokenCount, estimate_tokens
@@ -31,7 +32,7 @@ class BrokerContext:
 
 
 class ContextBroker:
-    def __init__(self, root: Path) -> None:
+    def __init__(self, root: Path, external_skill_roots: tuple[Path, ...] = ()) -> None:
         self.root = root.resolve()
         self.settings = Settings(root=self.root)
         self.policy = SecurityPolicy.from_root(self.root)
@@ -41,6 +42,7 @@ class ContextBroker:
         self.project_state = ProjectStateStore(state / "project-state.json")
         self.stats = StatsLedger(state / "stats.json")
         self.indexer = RepositoryIndexer(self.root, self.policy, self.cache)
+        self.skills = SkillCatalog(root=self.root, external_roots=external_skill_roots)
         self.retriever = Retriever()
         self.git = GitDiffEngine()
         self.results = ResultAnalyzer()
@@ -84,7 +86,15 @@ class ContextBroker:
         preferred_paths: set[str] | None = None,
     ) -> SearchResponse:
         before = self.cache.status()
-        index = self.indexer.build()
+        repo_index = self.indexer.build()
+        skill_index = self.skills.build_skill_index()
+        all_slices = repo_index.slices + skill_index.slices
+        from .models import RepositoryIndex
+        index = RepositoryIndex(
+            root=repo_index.root,
+            slices=all_slices,
+            file_count=repo_index.file_count + skill_index.file_count,
+        )
         self._record_cache_delta(before.hits, before.misses)
         response = self.retriever.search(
             index,
@@ -99,6 +109,33 @@ class ContextBroker:
         )
         raw_bytes = sum(len(item.text.encode("utf-8")) for item in index.slices)
         self._record_search_stats(response, raw_bytes=raw_bytes, budget_tokens=budget_tokens)
+        
+        # Skill telemetry tracking
+        discovered = self.skills.discover_skills()
+        selected_skills = [
+            r for r in response.results if any(reason.startswith("skill-") for reason in r.reasons)
+        ]
+        meta_bytes = sum(
+            len(item.text.encode("utf-8")) for item in index.slices if item.kind == "skill_metadata"
+        )
+        returned_meta = sum(
+            len(r.snippet.encode("utf-8")) for r in response.results if "skill-metadata" in r.reasons
+        )
+        returned_instr = sum(
+            len(r.snippet.encode("utf-8")) for r in response.results if "skill-instruction" in r.reasons
+        )
+        returned_res = sum(
+            len(r.snippet.encode("utf-8")) for r in response.results if "skill-resource" in r.reasons
+        )
+        self.stats.record_skills(
+            discovered=len(discovered),
+            candidates=len(discovered),
+            selected=len(selected_skills),
+            metadata_considered=meta_bytes,
+            metadata_returned=returned_meta,
+            instruction_returned=returned_instr,
+            resource_returned=returned_res,
+        )
         return response
 
     def search(
@@ -117,7 +154,15 @@ class ContextBroker:
         bounded_budget = min(30_000, max(1, budget_tokens))
         if ref is not None:
             before = self.cache.status()
-            index = self.indexer.build()
+            repo_index = self.indexer.build()
+            skill_index = self.skills.build_skill_index()
+            all_slices = repo_index.slices + skill_index.slices
+            from .models import RepositoryIndex
+            index = RepositoryIndex(
+                root=repo_index.root,
+                slices=all_slices,
+                file_count=repo_index.file_count + skill_index.file_count,
+            )
             self._record_cache_delta(before.hits, before.misses)
             response = self.retriever.expand_ref(
                 index,
