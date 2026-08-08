@@ -16,10 +16,10 @@ jobs:
     timeout-minutes: 15
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v7
         with:
           python-version: '3.12'
           cache: pip
@@ -40,6 +40,11 @@ jobs:
 
       - name: Build
         run: python -m build
+
+      - name: Synthetic benchmark
+        run: |
+          ct-conductor benchmark --output /tmp/v0.2-benchmark.json --seed 20260807
+          cat /tmp/v0.2-benchmark.json
 
       - name: Bandit
         run: bandit -q -r src -ll
