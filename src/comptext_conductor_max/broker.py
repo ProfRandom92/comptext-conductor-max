@@ -13,6 +13,7 @@ from .indexer import RepositoryIndexer
 from .results import ResultAnalyzer
 from .retrieval import Retriever, SearchResponse
 from .security import SecurityPolicy
+from .state import ProjectStateStore
 from .stats import StatsLedger
 from .tokens import TokenCount, estimate_tokens
 
@@ -37,6 +38,7 @@ class ContextBroker:
         state = self.root / ".comptext"
         self.cache = ContentCache(state / "cache")
         self.checkpoints = CheckpointStore(state / "checkpoints")
+        self.project_state = ProjectStateStore(state / "project-state.json")
         self.stats = StatsLedger(state / "stats.json")
         self.indexer = RepositoryIndexer(self.root, self.policy, self.cache)
         self.retriever = Retriever()
@@ -119,7 +121,12 @@ class ContextBroker:
         if budget is not None:
             hard_limit = min(hard_limit, max(1, budget))
         changed: set[str] = set()
-        failures: set[str] = set()
+        runtime_state = self.project_state.snapshot()
+        failures = {
+            path
+            for path in runtime_state.latest_result_files
+            if self.policy.is_path_allowed(self.root / path)
+        }
         try:
             diff = self.git.summarize(self.root)
             changed.update(diff.source_files)
@@ -127,7 +134,7 @@ class ContextBroker:
             self.stats.record_diff(raw_bytes=diff.raw_bytes, returned_bytes=0)
         except RuntimeError:
             pass
-        query = " ".join(part for part in (track, state.current_step or "", task) if part)
+        query_parts = [track, state.current_step or "", task]
         critical = {
             state.spec_path.relative_to(self.root).as_posix(),
             state.plan_path.relative_to(self.root).as_posix(),
@@ -138,6 +145,19 @@ class ContextBroker:
         for path in (state.metadata_path, state.index_path):
             if path is not None:
                 preferred.add(path.relative_to(self.root).as_posix())
+        checkpoint_hash = runtime_state.latest_checkpoints.get(track)
+        if checkpoint_hash is not None:
+            try:
+                checkpoint = self.checkpoints.load(checkpoint_hash)
+                query_parts.extend((checkpoint.step, checkpoint.next_step or ""))
+                preferred.update(
+                    path
+                    for path in checkpoint.files_changed
+                    if self.policy.is_path_allowed(self.root / path)
+                )
+            except (KeyError, OSError, ValueError):
+                pass
+        query = " ".join(part for part in query_parts if part)
         response = self._index_and_search(
             query,
             max_results=12,
@@ -218,10 +238,16 @@ class ContextBroker:
         bounded_lines = min(500, max(1, max_lines))
         summary = self.results.analyze(source, exit_code=exit_code, max_lines=bounded_lines)
         self.stats.record_log(raw_bytes=summary.raw_bytes, returned_bytes=summary.returned_bytes)
+        self.project_state.record_result(
+            summary.raw_sha256,
+            summary.likely_files,
+            summary.exit_code,
+        )
         return asdict(summary)
 
     def checkpoint_save(self, checkpoint: Checkpoint) -> dict[str, Any]:
         stored = self.checkpoints.save(checkpoint)
+        self.project_state.record_checkpoint(checkpoint.track, stored.checkpoint_hash)
         return {
             "checkpoint_hash": stored.checkpoint_hash,
             "track": checkpoint.track,
