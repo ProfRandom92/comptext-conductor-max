@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comptext-conductor-max"
-version = "0.2.0"
+version = "0.3.0"
 description = "Local-first Context Broker MCP companion for Conductor and Antigravity CLI"
 readme = "README.md"
 license = "MIT"
@@ -13,6 +13,7 @@ dependencies = [
   "mcp>=2.0.0,<3",
   "pathspec>=0.12,<1",
   "pydantic>=2.7,<3",
+  "pyyaml>=6.0,<7",
   "rich>=13.7,<15",
   "typer>=0.12,<1",
 ]

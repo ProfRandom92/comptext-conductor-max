@@ -32,6 +32,7 @@ class SearchResult:
     reasons: tuple[str, ...]
     token_count: TokenCount
     ref: str
+    symbols: tuple[str, ...] = ()
 
 
 @dataclass(frozen=True, slots=True)
@@ -116,7 +117,7 @@ class Retriever:
             score += 3
             reasons.append("conductor-metadata")
         elif item.kind == "skill_metadata":
-            score += 15
+            score += 35
             reasons.append("skill-metadata")
         elif item.kind == "skill_instruction":
             score += 20
@@ -169,6 +170,7 @@ class Retriever:
             reasons=("reference",),
             token_count=fitted.tokens,
             ref=ref,
+            symbols=item.symbols,
         )
         return SearchResponse(
             results=(result,),
@@ -251,6 +253,7 @@ class Retriever:
                     reasons=reasons,
                     token_count=fitted.tokens,
                     ref=make_ref(item),
+                    symbols=item.symbols,
                 )
             )
             lines_used += fitted.lines

@@ -6,6 +6,8 @@ import re
 from dataclasses import dataclass
 from pathlib import Path
 
+import yaml  # type: ignore[import-untyped]
+
 from .models import IndexedSlice, RepositoryIndex
 
 
@@ -45,15 +47,22 @@ def parse_skill_frontmatter(skill_md_path: Path, is_trusted: bool = False) -> Sk
     frontmatter_text = match.group(1)
     body_text = match.group(2).strip()
 
-    name = None
-    description = None
+    try:
+        data = yaml.safe_load(frontmatter_text)
+    except yaml.YAMLError:
+        return None
 
-    for line in frontmatter_text.splitlines():
-        line = line.strip()
-        if line.startswith("name:"):
-            name = line.split("name:", 1)[1].strip().strip('"').strip("'")
-        elif line.startswith("description:"):
-            description = line.split("description:", 1)[1].strip().strip('"').strip("'")
+    if not isinstance(data, dict):
+        return None
+
+    name = data.get("name")
+    description = data.get("description")
+
+    if not isinstance(name, str) or not isinstance(description, str):
+        return None
+
+    name = name.strip()
+    description = description.strip()
 
     if not name or not description:
         return None
@@ -162,11 +171,17 @@ class SkillCatalog:
         if not meta:
             return None
 
-        skill_dir = Path(meta.source_path).parent
-        target_file = (skill_dir / resource_rel_path).resolve()
+        resolved_skill_dir = Path(meta.source_path).parent.resolve()
+        try:
+            target_file = (resolved_skill_dir / resource_rel_path).resolve(strict=False)
+        except (OSError, ValueError):
+            return None
 
-        # Prevent path traversal outside skill_dir
-        if not str(target_file).startswith(str(skill_dir.resolve())):
+        # Prevent path traversal outside resolved_skill_dir
+        if not target_file.is_relative_to(resolved_skill_dir) or target_file == resolved_skill_dir:
+            return None
+
+        if target_file.is_symlink():
             return None
 
         if target_file.exists() and target_file.is_file():

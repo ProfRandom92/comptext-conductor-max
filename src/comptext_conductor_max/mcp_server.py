@@ -21,7 +21,7 @@ def create_server(root: Path | None = None) -> MCPServer:
             "Prefer bounded broker tools for repository context, diffs, and logs; "
             "expand only when correctness requires it."
         ),
-        version="0.2.0",
+        version="0.3.0",
     )
 
     @server.tool(

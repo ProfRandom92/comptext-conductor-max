@@ -1,1 +1,1 @@
-Review a Google Cloud workload architecture against the Google Cloud Well-Architected Framework security and performance principles. Identify concrete security and performance risks and provide grounded recommendations.
+Review a Google Cloud workload architecture against the Google Cloud Well-Architected Framework security and performance optimization principles. Identify concrete security and performance risks and provide grounded recommendations.

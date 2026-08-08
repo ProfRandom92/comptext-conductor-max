@@ -4,9 +4,9 @@
       "mode": "Mode A (CompText v0.2 \u2014 no Agent Skills)",
       "trials": [
         {
-          "returned_bytes": 6901,
-          "estimated_tokens": 1726,
-          "elapsed_seconds": 9.037675499996112,
+          "returned_bytes": 8859,
+          "estimated_tokens": 2215,
+          "elapsed_seconds": 38.26085809999495,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -16,9 +16,9 @@
           "recall": 0.0
         },
         {
-          "returned_bytes": 6901,
-          "estimated_tokens": 1726,
-          "elapsed_seconds": 8.705169300003035,
+          "returned_bytes": 8859,
+          "estimated_tokens": 2215,
+          "elapsed_seconds": 24.604703399993014,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -28,9 +28,9 @@
           "recall": 0.0
         },
         {
-          "returned_bytes": 6901,
-          "estimated_tokens": 1726,
-          "elapsed_seconds": 8.226579900001525,
+          "returned_bytes": 8859,
+          "estimated_tokens": 2215,
+          "elapsed_seconds": 13.274505800000043,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -41,11 +41,11 @@
         }
       ],
       "summary": {
-        "estimated_tokens_median": 1726,
-        "estimated_tokens_min": 1726,
-        "estimated_tokens_max": 1726,
-        "bytes_median": 6901,
-        "elapsed_seconds_median": 8.7052,
+        "estimated_tokens_median": 2215,
+        "estimated_tokens_min": 2215,
+        "estimated_tokens_max": 2215,
+        "bytes_median": 8859,
+        "elapsed_seconds_median": 24.6047,
         "selected_skills_median": 0,
         "precision_median": 0.0,
         "recall_median": 0.0,
@@ -56,9 +56,9 @@
       "mode": "Mode B (CompText v0.2 + native Antigravity Agent Skills)",
       "trials": [
         {
-          "returned_bytes": 574897,
-          "estimated_tokens": 143725,
-          "elapsed_seconds": 7.7385877999986405,
+          "returned_bytes": 628440,
+          "estimated_tokens": 157110,
+          "elapsed_seconds": 14.355172399998992,
           "selected_skills": [
             "google-ads-api-account-diagnostics",
             "google-ads-api-mcp-setup",
@@ -82,6 +82,7 @@
             "gke-ai-troubleshooting-handle-disruption-gpu-tpu",
             "gke-ai-troubleshooting-jobset-interruption",
             "gke-ai-troubleshooting-tpu-vbar-oom",
+            "gke-cost-optimization",
             "gke-platform-security",
             "gke-workload-scaling",
             "gke-workload-security",
@@ -111,17 +112,17 @@
             "google-cloud-waf-sustainability",
             "workload-manager-basics"
           ],
-          "selected_skill_count": 50,
+          "selected_skill_count": 51,
           "tp": 2,
-          "fp": 48,
+          "fp": 49,
           "fn": 0,
-          "precision": 0.04,
+          "precision": 0.0392,
           "recall": 1.0
         },
         {
-          "returned_bytes": 574897,
-          "estimated_tokens": 143725,
-          "elapsed_seconds": 7.649784199995338,
+          "returned_bytes": 628440,
+          "estimated_tokens": 157110,
+          "elapsed_seconds": 18.82356930000242,
           "selected_skills": [
             "google-ads-api-account-diagnostics",
             "google-ads-api-mcp-setup",
@@ -145,6 +146,7 @@
             "gke-ai-troubleshooting-handle-disruption-gpu-tpu",
             "gke-ai-troubleshooting-jobset-interruption",
             "gke-ai-troubleshooting-tpu-vbar-oom",
+            "gke-cost-optimization",
             "gke-platform-security",
             "gke-workload-scaling",
             "gke-workload-security",
@@ -174,17 +176,17 @@
             "google-cloud-waf-sustainability",
             "workload-manager-basics"
           ],
-          "selected_skill_count": 50,
+          "selected_skill_count": 51,
           "tp": 2,
-          "fp": 48,
+          "fp": 49,
           "fn": 0,
-          "precision": 0.04,
+          "precision": 0.0392,
           "recall": 1.0
         },
         {
-          "returned_bytes": 574897,
-          "estimated_tokens": 143725,
-          "elapsed_seconds": 7.747101999993902,
+          "returned_bytes": 628440,
+          "estimated_tokens": 157110,
+          "elapsed_seconds": 22.432400999998208,
           "selected_skills": [
             "google-ads-api-account-diagnostics",
             "google-ads-api-mcp-setup",
@@ -208,6 +210,7 @@
             "gke-ai-troubleshooting-handle-disruption-gpu-tpu",
             "gke-ai-troubleshooting-jobset-interruption",
             "gke-ai-troubleshooting-tpu-vbar-oom",
+            "gke-cost-optimization",
             "gke-platform-security",
             "gke-workload-scaling",
             "gke-workload-security",
@@ -237,94 +240,87 @@
             "google-cloud-waf-sustainability",
             "workload-manager-basics"
           ],
-          "selected_skill_count": 50,
+          "selected_skill_count": 51,
           "tp": 2,
-          "fp": 48,
+          "fp": 49,
           "fn": 0,
-          "precision": 0.04,
+          "precision": 0.0392,
           "recall": 1.0
         }
       ],
       "summary": {
-        "estimated_tokens_median": 143725,
-        "estimated_tokens_min": 143725,
-        "estimated_tokens_max": 143725,
-        "bytes_median": 574897,
-        "elapsed_seconds_median": 7.7386,
-        "selected_skills_median": 50,
-        "precision_median": 0.04,
+        "estimated_tokens_median": 157110,
+        "estimated_tokens_min": 157110,
+        "estimated_tokens_max": 157110,
+        "bytes_median": 628440,
+        "elapsed_seconds_median": 18.8236,
+        "selected_skills_median": 51,
+        "precision_median": 0.0392,
         "recall_median": 1.0,
-        "false_positives_median": 48
+        "false_positives_median": 49
       }
     },
     {
       "mode": "Mode C (CompText v0.3 + Skill-Aware Context Runtime)",
       "trials": [
         {
-          "returned_bytes": 9376,
-          "estimated_tokens": 2344,
-          "elapsed_seconds": 7.951879499996721,
+          "returned_bytes": 8745,
+          "estimated_tokens": 2187,
+          "elapsed_seconds": 17.812547800000175,
           "selected_skills": [
-            "# Google Cloud Well-Architected Framework skill for the Performance Optimization pillar",
-            "# Google Cloud Well-Architected Framework skill for the Operational Excellence pillar"
+            "google-cloud-waf-performance-optimization"
           ],
-          "selected_skill_count": 2,
+          "selected_skill_count": 1,
+          "tp": 1,
+          "fp": 0,
+          "fn": 1,
+          "precision": 1.0,
+          "recall": 0.5
+        },
+        {
+          "returned_bytes": 8859,
+          "estimated_tokens": 2215,
+          "elapsed_seconds": 18.601636999999755,
+          "selected_skills": [],
+          "selected_skill_count": 0,
           "tp": 0,
-          "fp": 2,
+          "fp": 0,
           "fn": 2,
           "precision": 0.0,
           "recall": 0.0
         },
         {
-          "returned_bytes": 9376,
-          "estimated_tokens": 2344,
-          "elapsed_seconds": 7.903617600000871,
-          "selected_skills": [
-            "# Google Cloud Well-Architected Framework skill for the Performance Optimization pillar",
-            "# Google Cloud Well-Architected Framework skill for the Operational Excellence pillar"
-          ],
-          "selected_skill_count": 2,
+          "returned_bytes": 8859,
+          "estimated_tokens": 2215,
+          "elapsed_seconds": 15.505687099997886,
+          "selected_skills": [],
+          "selected_skill_count": 0,
           "tp": 0,
-          "fp": 2,
-          "fn": 2,
-          "precision": 0.0,
-          "recall": 0.0
-        },
-        {
-          "returned_bytes": 9376,
-          "estimated_tokens": 2344,
-          "elapsed_seconds": 7.884352199995192,
-          "selected_skills": [
-            "# Google Cloud Well-Architected Framework skill for the Performance Optimization pillar",
-            "# Google Cloud Well-Architected Framework skill for the Operational Excellence pillar"
-          ],
-          "selected_skill_count": 2,
-          "tp": 0,
-          "fp": 2,
+          "fp": 0,
           "fn": 2,
           "precision": 0.0,
           "recall": 0.0
         }
       ],
       "summary": {
-        "estimated_tokens_median": 2344,
-        "estimated_tokens_min": 2344,
-        "estimated_tokens_max": 2344,
-        "bytes_median": 9376,
-        "elapsed_seconds_median": 7.9036,
-        "selected_skills_median": 2,
+        "estimated_tokens_median": 2215,
+        "estimated_tokens_min": 2187,
+        "estimated_tokens_max": 2215,
+        "bytes_median": 8859,
+        "elapsed_seconds_median": 17.8125,
+        "selected_skills_median": 0,
         "precision_median": 0.0,
         "recall_median": 0.0,
-        "false_positives_median": 2
+        "false_positives_median": 0
       }
     },
     {
       "mode": "Mode D (Naive full-body skill concatenation stress test)",
       "trials": [
         {
-          "returned_bytes": 1090200,
-          "estimated_tokens": 272550,
-          "elapsed_seconds": 7.89378819999547,
+          "returned_bytes": 1092158,
+          "estimated_tokens": 273040,
+          "elapsed_seconds": 10.231024200009415,
           "selected_skills": [
             "data-manager-api-audience-ingestion",
             "data-manager-api-event-ingestion",
@@ -439,9 +435,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 1090200,
-          "estimated_tokens": 272550,
-          "elapsed_seconds": 7.750350800000888,
+          "returned_bytes": 1090750,
+          "estimated_tokens": 272688,
+          "elapsed_seconds": 12.339291299998877,
           "selected_skills": [
             "data-manager-api-audience-ingestion",
             "data-manager-api-event-ingestion",
@@ -556,9 +552,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 1090200,
-          "estimated_tokens": 272550,
-          "elapsed_seconds": 7.662259299999278,
+          "returned_bytes": 1090750,
+          "estimated_tokens": 272688,
+          "elapsed_seconds": 13.394940699989093,
           "selected_skills": [
             "data-manager-api-audience-ingestion",
             "data-manager-api-event-ingestion",
@@ -674,11 +670,11 @@
         }
       ],
       "summary": {
-        "estimated_tokens_median": 272550,
-        "estimated_tokens_min": 272550,
-        "estimated_tokens_max": 272550,
-        "bytes_median": 1090200,
-        "elapsed_seconds_median": 7.7504,
+        "estimated_tokens_median": 272688,
+        "estimated_tokens_min": 272688,
+        "estimated_tokens_max": 273040,
+        "bytes_median": 1090750,
+        "elapsed_seconds_median": 12.3393,
         "selected_skills_median": 104,
         "precision_median": 0.0192,
         "recall_median": 1.0,
@@ -691,9 +687,9 @@
       "mode": "Mode A (CompText v0.2 \u2014 no Agent Skills)",
       "trials": [
         {
-          "returned_bytes": 11185,
-          "estimated_tokens": 2797,
-          "elapsed_seconds": 7.536740700001246,
+          "returned_bytes": 9844,
+          "estimated_tokens": 2461,
+          "elapsed_seconds": 12.67540179999196,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -703,9 +699,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 11185,
-          "estimated_tokens": 2797,
-          "elapsed_seconds": 7.464758299996902,
+          "returned_bytes": 9844,
+          "estimated_tokens": 2461,
+          "elapsed_seconds": 11.690481600002386,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -715,9 +711,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 11185,
-          "estimated_tokens": 2797,
-          "elapsed_seconds": 7.462356299998646,
+          "returned_bytes": 9844,
+          "estimated_tokens": 2461,
+          "elapsed_seconds": 13.270542800004478,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -728,11 +724,11 @@
         }
       ],
       "summary": {
-        "estimated_tokens_median": 2797,
-        "estimated_tokens_min": 2797,
-        "estimated_tokens_max": 2797,
-        "bytes_median": 11185,
-        "elapsed_seconds_median": 7.4648,
+        "estimated_tokens_median": 2461,
+        "estimated_tokens_min": 2461,
+        "estimated_tokens_max": 2461,
+        "bytes_median": 9844,
+        "elapsed_seconds_median": 12.6754,
         "selected_skills_median": 0,
         "precision_median": 1.0,
         "recall_median": 1.0,
@@ -743,73 +739,76 @@
       "mode": "Mode B (CompText v0.2 + native Antigravity Agent Skills)",
       "trials": [
         {
-          "returned_bytes": 91219,
-          "estimated_tokens": 22805,
-          "elapsed_seconds": 7.677263900004618,
+          "returned_bytes": 130025,
+          "estimated_tokens": 32507,
+          "elapsed_seconds": 15.711168199995882,
           "selected_skills": [
             "google-mobile-ads-android-migrate-to-next-gen",
-            "cloud-run-basics",
+            "datalineage-bigquery-asset-impact-analysis",
+            "gke-cost-analysis",
             "google-cloud-solution-n-tier-serverless-web-app"
           ],
-          "selected_skill_count": 3,
+          "selected_skill_count": 4,
           "tp": 0,
-          "fp": 3,
+          "fp": 4,
           "fn": 0,
           "precision": 0.0,
           "recall": 1.0
         },
         {
-          "returned_bytes": 91219,
-          "estimated_tokens": 22805,
-          "elapsed_seconds": 7.588754800002789,
+          "returned_bytes": 130025,
+          "estimated_tokens": 32507,
+          "elapsed_seconds": 14.066243799999938,
           "selected_skills": [
             "google-mobile-ads-android-migrate-to-next-gen",
-            "cloud-run-basics",
+            "datalineage-bigquery-asset-impact-analysis",
+            "gke-cost-analysis",
             "google-cloud-solution-n-tier-serverless-web-app"
           ],
-          "selected_skill_count": 3,
+          "selected_skill_count": 4,
           "tp": 0,
-          "fp": 3,
+          "fp": 4,
           "fn": 0,
           "precision": 0.0,
           "recall": 1.0
         },
         {
-          "returned_bytes": 91219,
-          "estimated_tokens": 22805,
-          "elapsed_seconds": 7.637832500004151,
+          "returned_bytes": 130025,
+          "estimated_tokens": 32507,
+          "elapsed_seconds": 14.361429900003714,
           "selected_skills": [
             "google-mobile-ads-android-migrate-to-next-gen",
-            "cloud-run-basics",
+            "datalineage-bigquery-asset-impact-analysis",
+            "gke-cost-analysis",
             "google-cloud-solution-n-tier-serverless-web-app"
           ],
-          "selected_skill_count": 3,
+          "selected_skill_count": 4,
           "tp": 0,
-          "fp": 3,
+          "fp": 4,
           "fn": 0,
           "precision": 0.0,
           "recall": 1.0
         }
       ],
       "summary": {
-        "estimated_tokens_median": 22805,
-        "estimated_tokens_min": 22805,
-        "estimated_tokens_max": 22805,
-        "bytes_median": 91219,
-        "elapsed_seconds_median": 7.6378,
-        "selected_skills_median": 3,
+        "estimated_tokens_median": 32507,
+        "estimated_tokens_min": 32507,
+        "estimated_tokens_max": 32507,
+        "bytes_median": 130025,
+        "elapsed_seconds_median": 14.3614,
+        "selected_skills_median": 4,
         "precision_median": 0.0,
         "recall_median": 1.0,
-        "false_positives_median": 3
+        "false_positives_median": 4
       }
     },
     {
       "mode": "Mode C (CompText v0.3 + Skill-Aware Context Runtime)",
       "trials": [
         {
-          "returned_bytes": 9744,
-          "estimated_tokens": 2436,
-          "elapsed_seconds": 7.923104300003615,
+          "returned_bytes": 10248,
+          "estimated_tokens": 2562,
+          "elapsed_seconds": 11.537843300000532,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -819,9 +818,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 9744,
-          "estimated_tokens": 2436,
-          "elapsed_seconds": 7.874321299997973,
+          "returned_bytes": 10248,
+          "estimated_tokens": 2562,
+          "elapsed_seconds": 10.976317499997094,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -831,9 +830,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 9744,
-          "estimated_tokens": 2436,
-          "elapsed_seconds": 8.15991319999739,
+          "returned_bytes": 10248,
+          "estimated_tokens": 2562,
+          "elapsed_seconds": 11.786075900003198,
           "selected_skills": [],
           "selected_skill_count": 0,
           "tp": 0,
@@ -844,11 +843,11 @@
         }
       ],
       "summary": {
-        "estimated_tokens_median": 2436,
-        "estimated_tokens_min": 2436,
-        "estimated_tokens_max": 2436,
-        "bytes_median": 9744,
-        "elapsed_seconds_median": 7.9231,
+        "estimated_tokens_median": 2562,
+        "estimated_tokens_min": 2562,
+        "estimated_tokens_max": 2562,
+        "bytes_median": 10248,
+        "elapsed_seconds_median": 11.5378,
         "selected_skills_median": 0,
         "precision_median": 1.0,
         "recall_median": 1.0,
@@ -859,9 +858,9 @@
       "mode": "Mode D (Naive full-body skill concatenation stress test)",
       "trials": [
         {
-          "returned_bytes": 1094484,
-          "estimated_tokens": 273621,
-          "elapsed_seconds": 7.598233700002311,
+          "returned_bytes": 1093143,
+          "estimated_tokens": 273286,
+          "elapsed_seconds": 11.851393299992196,
           "selected_skills": [
             "data-manager-api-audience-ingestion",
             "data-manager-api-event-ingestion",
@@ -976,9 +975,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 1094484,
-          "estimated_tokens": 273621,
-          "elapsed_seconds": 7.677671900004498,
+          "returned_bytes": 1093143,
+          "estimated_tokens": 273286,
+          "elapsed_seconds": 13.210751799997524,
           "selected_skills": [
             "data-manager-api-audience-ingestion",
             "data-manager-api-event-ingestion",
@@ -1093,9 +1092,9 @@
           "recall": 1.0
         },
         {
-          "returned_bytes": 1094484,
-          "estimated_tokens": 273621,
-          "elapsed_seconds": 7.703456499999447,
+          "returned_bytes": 1093143,
+          "estimated_tokens": 273286,
+          "elapsed_seconds": 10.905462100010482,
           "selected_skills": [
             "data-manager-api-audience-ingestion",
             "data-manager-api-event-ingestion",
@@ -1211,11 +1210,11 @@
         }
       ],
       "summary": {
-        "estimated_tokens_median": 273621,
-        "estimated_tokens_min": 273621,
-        "estimated_tokens_max": 273621,
-        "bytes_median": 1094484,
-        "elapsed_seconds_median": 7.6777,
+        "estimated_tokens_median": 273286,
+        "estimated_tokens_min": 273286,
+        "estimated_tokens_max": 273286,
+        "bytes_median": 1093143,
+        "elapsed_seconds_median": 11.8514,
         "selected_skills_median": 104,
         "precision_median": 0.0,
         "recall_median": 1.0,

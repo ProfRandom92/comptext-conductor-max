@@ -83,12 +83,12 @@ def evaluate_run(mode_name: str, task_info: dict[str, Any], root: Path) -> dict[
     elif mode_name == "Mode C (CompText v0.3 + Skill-Aware Context Runtime)":
         # Mode C: CompText v0.3 Skill-Aware Runtime with BM25 selection and 3-level progressive disclosure
         broker = ContextBroker(root, external_skill_roots=(EXTERNAL_SKILLS_PATH,))
-        res = broker.search(query=task_info["prompt"], budget_tokens=18_000)
+        res = broker.search(query=task_info["prompt"], max_results=8, budget_tokens=18_000)
         returned_bytes = sum(len(r.snippet.encode("utf-8")) for r in res.results)
         selected_skills = [
-            r.snippet.split("\n")[0].replace("Skill: ", "").strip()
+            r.symbols[0]
             for r in res.results
-            if "skill-metadata" in r.reasons or "skill-instruction" in r.reasons
+            if r.symbols and any(reason.startswith("skill-") for reason in r.reasons)
         ]
         
     elif mode_name == "Mode D (Naive full-body skill concatenation stress test)":

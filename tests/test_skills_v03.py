@@ -179,3 +179,119 @@ def test_skill_ctref_resolution_and_stale_invalidation(skills_temp_dir):
     # Resolving old ref against new mutated index MUST raise StaleRefError
     with pytest.raises(StaleRefError):
         resolve_ref(new_idx, ref_id)
+
+
+def test_yaml_frontmatter_block_scalars_and_google_fixtures(skills_temp_dir):
+    # Test folded scalar >-
+    s1 = skills_temp_dir / "google-cloud-waf-security"
+    s1.mkdir()
+    (s1 / "SKILL.md").write_text(
+        "---\n"
+        "name: google-cloud-waf-security\n"
+        "description: >-\n"
+        "  Google Cloud Well-Architected Framework skill for the Security pillar.\n"
+        "  Provides architectural principles.\n"
+        "---\n"
+        "# Body content",
+        encoding="utf-8",
+    )
+    meta1 = parse_skill_frontmatter(s1 / "SKILL.md")
+    assert meta1 is not None
+    assert meta1.name == "google-cloud-waf-security"
+    assert meta1.description == "Google Cloud Well-Architected Framework skill for the Security pillar. Provides architectural principles."
+    assert ">-" not in meta1.description
+
+    # Test literal scalar |
+    s2 = skills_temp_dir / "google-cloud-waf-performance-optimization"
+    s2.mkdir()
+    (s2 / "SKILL.md").write_text(
+        "---\n"
+        "name: google-cloud-waf-performance-optimization\n"
+        "description: |\n"
+        "  Google Cloud Well-Architected Framework skill for Performance Optimization.\n"
+        "  Multi-line performance recommendations.\n"
+        "---\n"
+        "# Body content",
+        encoding="utf-8",
+    )
+    meta2 = parse_skill_frontmatter(s2 / "SKILL.md")
+    assert meta2 is not None
+    assert meta2.name == "google-cloud-waf-performance-optimization"
+    assert "Performance Optimization" in meta2.description
+    assert "|" not in meta2.description
+
+
+def test_positive_control_ground_truth_recall_equals_one(skills_temp_dir):
+    # Set up the exact ground truth positive control skills
+    s1 = skills_temp_dir / "google-cloud-waf-security"
+    s1.mkdir()
+    (s1 / "SKILL.md").write_text(
+        "---\n"
+        "name: google-cloud-waf-security\n"
+        "description: Google Cloud Well-Architected Framework skill for the Security pillar.\n"
+        "---\n"
+        "# Security Pillar",
+        encoding="utf-8",
+    )
+    s2 = skills_temp_dir / "google-cloud-waf-performance-optimization"
+    s2.mkdir()
+    (s2 / "SKILL.md").write_text(
+        "---\n"
+        "name: google-cloud-waf-performance-optimization\n"
+        "description: Google Cloud Well-Architected Framework skill for the Performance Optimization pillar.\n"
+        "---\n"
+        "# Performance Optimization",
+        encoding="utf-8",
+    )
+
+    catalog = SkillCatalog(external_roots=(skills_temp_dir,))
+    query = "Review a Google Cloud workload architecture against the Google Cloud Well-Architected Framework security and performance principles. Identify concrete security and performance risks and provide grounded recommendations."
+    
+    ranked = catalog.rank_skills(query, candidates=catalog.discover_skills())
+    selected_names = {s.name for s in ranked}
+    
+    expected = {"google-cloud-waf-security", "google-cloud-waf-performance-optimization"}
+    tp = len(selected_names.intersection(expected))
+    fn = len(expected - selected_names)
+    recall = tp / (tp + fn) if (tp + fn) > 0 else 0.0
+    
+    assert tp == 2
+    assert fn == 0
+    assert recall == 1.0
+
+
+def test_path_containment_resource_security(skills_temp_dir):
+    s1 = skills_temp_dir / "google-cloud-waf-security"
+    s1.mkdir()
+    (s1 / "SKILL.md").write_text(
+        "---\nname: google-cloud-waf-security\ndescription: WAF Security.\n---\nBody",
+        encoding="utf-8",
+    )
+    # Sibling directory with shared prefix attack
+    sibling = skills_temp_dir / "google-cloud-waf-security_sibling"
+    sibling.mkdir()
+    (sibling / "secret.txt").write_text("SIBLING SECRET", encoding="utf-8")
+
+    catalog = SkillCatalog(external_roots=(skills_temp_dir,))
+    
+    # 1. Directory traversal attempt using ../
+    assert catalog.get_skill_resource("google-cloud-waf-security", "../google-cloud-waf-security_sibling/secret.txt") is None
+
+    # 2. Absolute path escape attempt
+    assert catalog.get_skill_resource("google-cloud-waf-security", "/etc/passwd") is None
+
+
+def test_canonical_skill_identity_in_search_results(skills_temp_dir):
+    s1 = skills_temp_dir / "google-cloud-waf-security"
+    s1.mkdir()
+    (s1 / "SKILL.md").write_text(
+        "---\nname: google-cloud-waf-security\ndescription: Cloud Armor WAF security principles.\n---\nBody",
+        encoding="utf-8",
+    )
+    catalog = SkillCatalog(external_roots=(skills_temp_dir,))
+    index = catalog.build_skill_index()
+    
+    # Verify symbols on IndexedSlice transport canonical skill name
+    slice_item = index.slices[0]
+    assert slice_item.symbols == ("google-cloud-waf-security",)
+

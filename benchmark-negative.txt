@@ -1,1 +1,1 @@
-Diagnose and fix a deterministic stale ctref invalidation bug in CompText Conductor Max. Add the smallest regression test and run the relevant verification suite.
+Diagnose the root cause of a potential stale ctref invalidation issue in CompText Conductor Max refs module. Return a concise technical analysis without modifying codebase files.
