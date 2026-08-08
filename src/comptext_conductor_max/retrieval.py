@@ -8,6 +8,7 @@ from pathlib import PurePosixPath
 
 from .budget import fit_text
 from .models import IndexedSlice, RepositoryIndex
+from .refs import make_ref, resolve_ref
 from .tokens import TokenCount, estimate_tokens
 
 _TOKEN = re.compile(r"[a-z0-9]+")
@@ -30,6 +31,7 @@ class SearchResult:
     score: int
     reasons: tuple[str, ...]
     token_count: TokenCount
+    ref: str
 
 
 @dataclass(frozen=True, slots=True)
@@ -131,6 +133,42 @@ class Retriever:
             reasons.append("critical")
         return score, tuple(reasons)
 
+    def expand_ref(
+        self,
+        index: RepositoryIndex,
+        ref: str,
+        *,
+        max_lines: int = 180,
+        budget_tokens: int = 18_000,
+    ) -> SearchResponse:
+        item = resolve_ref(index, ref)
+        fitted = fit_text(item.text, max_lines=max_lines, max_tokens=budget_tokens)
+        if fitted is None:
+            return SearchResponse(
+                results=(),
+                returned_lines=0,
+                returned_tokens=TokenCount(0, False, "estimated_tokens"),
+                budget_exceeded=True,
+                omitted_critical=(item.path,),
+            )
+        result = SearchResult(
+            path=item.path,
+            start_line=item.start_line,
+            end_line=item.start_line + fitted.lines - 1,
+            snippet=fitted.text,
+            score=0,
+            reasons=("reference",),
+            token_count=fitted.tokens,
+            ref=ref,
+        )
+        return SearchResponse(
+            results=(result,),
+            returned_lines=fitted.lines,
+            returned_tokens=fitted.tokens,
+            budget_exceeded=False,
+            omitted_critical=(),
+        )
+
     def search(
         self,
         index: RepositoryIndex,
@@ -203,6 +241,7 @@ class Retriever:
                     score=score,
                     reasons=reasons,
                     token_count=fitted.tokens,
+                    ref=make_ref(item),
                 )
             )
             lines_used += fitted.lines
