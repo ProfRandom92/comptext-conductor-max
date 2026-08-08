@@ -56,6 +56,22 @@ async def test_mcp_initializes_lists_exactly_six_tools_and_calls_search(tmp_path
 
 
 @pytest.mark.asyncio
+async def test_search_result_ref_can_be_expanded_without_a_seventh_tool(tmp_path: Path):
+    _repo(tmp_path)
+    async with Client(create_server(tmp_path)) as client:
+        searched = await client.call_tool("ct_search", {"query": "legacy coordinate", "max_results": 1})
+        assert searched.is_error is False
+        payload = searched.structured_content or {}
+        ref = payload["results"][0]["ref"]
+        expanded = await client.call_tool("ct_search", {"ref": ref, "max_lines": 20, "budget": 2000})
+        assert expanded.is_error is False
+        expanded_payload = expanded.structured_content or {}
+        assert expanded_payload["results"][0]["ref"] == ref
+        assert expanded_payload["results"][0]["path"] == payload["results"][0]["path"]
+        assert expanded_payload["results"][0]["reasons"] == ["reference"]
+
+
+@pytest.mark.asyncio
 async def test_mcp_rejects_invalid_arguments_without_unbounded_output(tmp_path: Path):
     _repo(tmp_path)
     async with Client(create_server(tmp_path)) as client:
