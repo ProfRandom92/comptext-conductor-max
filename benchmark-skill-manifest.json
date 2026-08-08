@@ -1,0 +1,630 @@
+{
+  "google_skills_commit": "092e210b243601797a0fb939040be2b1288e6d39",
+  "skill_count": 104,
+  "skills": [
+    {
+      "name": "data-manager-api-audience-ingestion",
+      "path": "skills/ads/data-manager-api-audience-ingestion/SKILL.md",
+      "hash": "efd826b4981491cd72d82a29e414ce927ffc511fdc35f8d9fed219a9f5fbe293",
+      "bytes": 11335
+    },
+    {
+      "name": "data-manager-api-event-ingestion",
+      "path": "skills/ads/data-manager-api-event-ingestion/SKILL.md",
+      "hash": "e34283f87088840098913051839f2de1111e88cd4eb48d936078c67195f1a936",
+      "bytes": 9017
+    },
+    {
+      "name": "data-manager-api-setup",
+      "path": "skills/ads/data-manager-api-setup/SKILL.md",
+      "hash": "185ad939b83c21754e5311d06d7a5a66f929b3a1ff698c35764de5ac548c2cbe",
+      "bytes": 2798
+    },
+    {
+      "name": "google-ads-api-account-diagnostics",
+      "path": "skills/ads/google-ads-api-account-diagnostics/SKILL.md",
+      "hash": "6be64f0707e73c1a75bc1884efe7488f5aadeaa4c50abcc7a48677fd804b381c",
+      "bytes": 9883
+    },
+    {
+      "name": "google-ads-api-mcp-setup",
+      "path": "skills/ads/google-ads-api-mcp-setup/SKILL.md",
+      "hash": "7cfbc44bea4e2f67905ccc788ed00782c0ea7bd782cfd8722b9bf08490e9bbb0",
+      "bytes": 24314
+    },
+    {
+      "name": "google-ads-api-quickstart",
+      "path": "skills/ads/google-ads-api-quickstart/SKILL.md",
+      "hash": "54f4e4eac588e94c7c1f25c1f6540d46c3de5a5c8c9132f8f05bd97ee8170fbe",
+      "bytes": 17610
+    },
+    {
+      "name": "google-mobile-ads-android-migrate-to-next-gen",
+      "path": "skills/ads/google-mobile-ads-android-migrate-to-next-gen/SKILL.md",
+      "hash": "e8a1e910b87e4988722158aa8d6745418b035cf3bca63e6761872a71579c54d0",
+      "bytes": 39586
+    },
+    {
+      "name": "google-mobile-ads-banner",
+      "path": "skills/ads/google-mobile-ads-banner/SKILL.md",
+      "hash": "b2e9654757e8fbfbd7994998f4ff7259c4f1d9b1c0676127d3c4c4aaaf22b844",
+      "bytes": 1803
+    },
+    {
+      "name": "google-mobile-ads-get-started",
+      "path": "skills/ads/google-mobile-ads-get-started/SKILL.md",
+      "hash": "256c0114ed747d657bc73a70a72b50dfe861086145a295488cae79f43c8b2e58",
+      "bytes": 1056
+    },
+    {
+      "name": "google-mobile-ads-interstitial",
+      "path": "skills/ads/google-mobile-ads-interstitial/SKILL.md",
+      "hash": "1e55548f8e81c477597be5952e2ef2a53fc93baea1ac7cc7cdc1e2d3fba556c9",
+      "bytes": 1356
+    },
+    {
+      "name": "google-mobile-ads-rewarded",
+      "path": "skills/ads/google-mobile-ads-rewarded/SKILL.md",
+      "hash": "d2188730351c4eb8ee03fc25cdd1e6256bb5ebe06430c24c24d469556ff5a578",
+      "bytes": 1349
+    },
+    {
+      "name": "ima-sdk-basics",
+      "path": "skills/ads/ima-sdk-basics/SKILL.md",
+      "hash": "d6043f8a84725fc1238a5853ee1e92b6602ed2b9c83811409e01eba4bd021161",
+      "bytes": 2228
+    },
+    {
+      "name": "google-analytics-admin-api-basics",
+      "path": "skills/analytics/google-analytics-admin-api-basics/SKILL.md",
+      "hash": "e2fed3747a40387d2e19d39cf6440ddc8024e9ea28e5ced74db40a48820f5988",
+      "bytes": 7717
+    },
+    {
+      "name": "google-analytics-data-api-basics",
+      "path": "skills/analytics/google-analytics-data-api-basics/SKILL.md",
+      "hash": "7d06ef4629089af88616cca71fd24eef882f205ba3b0ca8617169311b53be666",
+      "bytes": 9595
+    },
+    {
+      "name": "agent-platform-alert-configuration",
+      "path": "skills/cloud/agent-platform-alert-configuration/SKILL.md",
+      "hash": "732aba29e210ae9dc26a3b9382c90866062060fd9f74dc76f1b900c6905f070b",
+      "bytes": 15503
+    },
+    {
+      "name": "agent-platform-deploy",
+      "path": "skills/cloud/agent-platform-deploy/SKILL.md",
+      "hash": "734555ca15759a2f2c18f8f55494b43edd11edb9d08f2231e4ada30a53bf6c3a",
+      "bytes": 18900
+    },
+    {
+      "name": "agent-platform-endpoint-management",
+      "path": "skills/cloud/agent-platform-endpoint-management/SKILL.md",
+      "hash": "480857f137b94ecb25c3e7daeb3921547848bfc7ecc726ed5e297984429c4960",
+      "bytes": 6160
+    },
+    {
+      "name": "agent-platform-eval-flywheel",
+      "path": "skills/cloud/agent-platform-eval-flywheel/SKILL.md",
+      "hash": "519b893e7958fc09b02df700d9ce590c3422be8c70a57372b3c2c39a073018a2",
+      "bytes": 21514
+    },
+    {
+      "name": "agent-platform-inference",
+      "path": "skills/cloud/agent-platform-inference/SKILL.md",
+      "hash": "b1df989d87fa033f7ff12b256364a59084eda159ae1e831625abae7aca9d9c9b",
+      "bytes": 31981
+    },
+    {
+      "name": "agent-platform-migrate-from-ai-studio",
+      "path": "skills/cloud/agent-platform-migrate-from-ai-studio/SKILL.md",
+      "hash": "66dc58c0443924f93782d6fa52f78b076282e03dce738442c7403c99a9a39314",
+      "bytes": 14044
+    },
+    {
+      "name": "agent-platform-model-registry",
+      "path": "skills/cloud/agent-platform-model-registry/SKILL.md",
+      "hash": "2077b6b45f91244f49fcce7d99bbe4c1f5f0211d63f5e47ec0d57d5a84e64854",
+      "bytes": 5226
+    },
+    {
+      "name": "agent-platform-prompt-management",
+      "path": "skills/cloud/agent-platform-prompt-management/SKILL.md",
+      "hash": "eb1a52d7869c3d2ccad4be6838c31d2742392534773af2cb595c96a685678e35",
+      "bytes": 7282
+    },
+    {
+      "name": "agent-platform-rag-engine-management",
+      "path": "skills/cloud/agent-platform-rag-engine-management/SKILL.md",
+      "hash": "9c5eef7e2c29962d4e18a14f5535c3b0b0515e7100d62a459500fc3a9ce80eb9",
+      "bytes": 8693
+    },
+    {
+      "name": "agent-platform-skill-registry",
+      "path": "skills/cloud/agent-platform-skill-registry/SKILL.md",
+      "hash": "6cfc4cc1e7aa396f3ff0bfbeed232df7034c0300ba888bdceb9a43bab61319de",
+      "bytes": 2314
+    },
+    {
+      "name": "agent-platform-troubleshooting",
+      "path": "skills/cloud/agent-platform-troubleshooting/SKILL.md",
+      "hash": "05233762ed7b6089cb3ba0e8dc87195c160898cf8b13943dde0e7f59528907ce",
+      "bytes": 23314
+    },
+    {
+      "name": "agent-platform-tuning-management",
+      "path": "skills/cloud/agent-platform-tuning-management/SKILL.md",
+      "hash": "305b66ed941ee8f3192a1cea751c16655b9d3192335aba1c27c3b2db2fab1701",
+      "bytes": 6266
+    },
+    {
+      "name": "agent-platform-tuning",
+      "path": "skills/cloud/agent-platform-tuning/SKILL.md",
+      "hash": "a8d75068c23271bd31524cd711b8d95878bb816be50dcaab1fc9b8798492cdfd",
+      "bytes": 23779
+    },
+    {
+      "name": "alloydb-basics",
+      "path": "skills/cloud/alloydb-basics/SKILL.md",
+      "hash": "5bcda6408256efb47922869fced77d447eb16447a820fe52f00f1db2230cc12a",
+      "bytes": 6920
+    },
+    {
+      "name": "bigquery-ai-ml",
+      "path": "skills/cloud/bigquery-ai-ml/SKILL.md",
+      "hash": "8897f8f8c2eea6c3a2faf4d4cd6c9dc0017c2fc23f515c1f8d4e5da92f567f0e",
+      "bytes": 2974
+    },
+    {
+      "name": "bigquery-basics",
+      "path": "skills/cloud/bigquery-basics/SKILL.md",
+      "hash": "039af2065e5f52d58c11853834028b8994248eae322fa2c8882b962d8b1e3e7f",
+      "bytes": 2777
+    },
+    {
+      "name": "bigquery-bigframes",
+      "path": "skills/cloud/bigquery-bigframes/SKILL.md",
+      "hash": "9324abde305e88cefdfa01fc3a1cc55c9d5aece55ffa91f180132137cfaf7d5f",
+      "bytes": 5063
+    },
+    {
+      "name": "bigtable-basics",
+      "path": "skills/cloud/bigtable-basics/SKILL.md",
+      "hash": "979515bd16dc88cdd8f8c69c712edcdfc08c5a1560ab8b3031dee1fb29a46faa",
+      "bytes": 5130
+    },
+    {
+      "name": "cloud-logging-configuration-basics",
+      "path": "skills/cloud/cloud-logging-configuration-basics/SKILL.md",
+      "hash": "de45e3a4105bf29f1c5771505cf14ef6f2a2893b6753ee32a7a251144eee71c5",
+      "bytes": 13831
+    },
+    {
+      "name": "cloud-logging-cross-project-configuration",
+      "path": "skills/cloud/cloud-logging-cross-project-configuration/SKILL.md",
+      "hash": "a72f9df12cc42e18258bbe48bb00522430e4f5244bd02e560f859203d33fb30a",
+      "bytes": 18161
+    },
+    {
+      "name": "cloud-logging-query-generation",
+      "path": "skills/cloud/cloud-logging-query-generation/SKILL.md",
+      "hash": "8496fe33aff71c3f17e6a0a45283281d542f7468c2c9ea390175a090798684d5",
+      "bytes": 7652
+    },
+    {
+      "name": "cloud-monitoring-chart-generation",
+      "path": "skills/cloud/cloud-monitoring-chart-generation/SKILL.md",
+      "hash": "8eebc5c57ce03dd82e36b4b48bb481bb44a87130ff8e4e6edecc4bac26a793ae",
+      "bytes": 7928
+    },
+    {
+      "name": "cloud-monitoring-metric-selection",
+      "path": "skills/cloud/cloud-monitoring-metric-selection/SKILL.md",
+      "hash": "4d76e7e14a9936d7474d2ce1febc049dfeb5f72f51a7a0c02a77edf737ae1588",
+      "bytes": 9667
+    },
+    {
+      "name": "cloud-run-basics",
+      "path": "skills/cloud/cloud-run-basics/SKILL.md",
+      "hash": "2636ca9682e587bfa302332d05b352110d6804cec489b31a2b603e4665c0ff6d",
+      "bytes": 15852
+    },
+    {
+      "name": "cloud-sql-basics",
+      "path": "skills/cloud/cloud-sql-basics/SKILL.md",
+      "hash": "56068df28db99f738161b3ddce1a698297a4aa84be4109003445d3f1e25c1394",
+      "bytes": 3872
+    },
+    {
+      "name": "datalineage-bigquery-asset-impact-analysis",
+      "path": "skills/cloud/datalineage-bigquery-asset-impact-analysis/SKILL.md",
+      "hash": "c68617bcc90e3b1368587a176b84b93b8eeca2ee3c4279b1d75b4f1a796fc597",
+      "bytes": 6639
+    },
+    {
+      "name": "datalineage-summary",
+      "path": "skills/cloud/datalineage-summary/SKILL.md",
+      "hash": "f8a8bcb0d3b91b68dd401fe32ea5f397a257761411ec62373e9f3cfd1dcc191f",
+      "bytes": 6731
+    },
+    {
+      "name": "detection-engineering-coverage-evaluation",
+      "path": "skills/cloud/detection-engineering-coverage-evaluation/SKILL.md",
+      "hash": "c46f9a4cba09a9681a8f85d60ddf9c59bafd3576523b3873406e989a33ce3a6c",
+      "bytes": 7964
+    },
+    {
+      "name": "developer-device-platform-basics",
+      "path": "skills/cloud/developer-device-platform-basics/SKILL.md",
+      "hash": "43b2b8c74b5d7fcabcd162dfa36ddd0d333678b206306091deec1c518f5213f2",
+      "bytes": 10055
+    },
+    {
+      "name": "firebase-basics",
+      "path": "skills/cloud/firebase-basics/SKILL.md",
+      "hash": "115f8ad02e5b4a335fa5d1c782bd504f9e7593ddd92f58b93f384d21edd4d537",
+      "bytes": 7543
+    },
+    {
+      "name": "gcloud",
+      "path": "skills/cloud/gcloud/SKILL.md",
+      "hash": "bd6c89a8e4b35042a5a4bddd7b175ac84acbae11fedd9f7d28626533c0467fb6",
+      "bytes": 14781
+    },
+    {
+      "name": "gemini-agents-api",
+      "path": "skills/cloud/gemini-agents-api/SKILL.md",
+      "hash": "a506af669e780e18213af8608daea8ca01dac61db99eecc0837d2cedebd349ea",
+      "bytes": 12794
+    },
+    {
+      "name": "gemini-api",
+      "path": "skills/cloud/gemini-api/SKILL.md",
+      "hash": "e730427242c5f958e4194db5f0083e18cabf8889d19ceb31bad69581a5980083",
+      "bytes": 10223
+    },
+    {
+      "name": "gemini-interactions-api",
+      "path": "skills/cloud/gemini-interactions-api/SKILL.md",
+      "hash": "0d3142895a4f74bd53a7a56011c904370d19ee628bc92cdd535f1af72a7c1376",
+      "bytes": 20098
+    },
+    {
+      "name": "gemini-live-api",
+      "path": "skills/cloud/gemini-live-api/SKILL.md",
+      "hash": "da43f7ce49c5661e79652032ba8584a7d00d8c82f4a13431e7f91ab8be5f0e07",
+      "bytes": 9825
+    },
+    {
+      "name": "gke-ai-troubleshooting-handle-disruption-gpu-tpu",
+      "path": "skills/cloud/gke-ai-troubleshooting-handle-disruption-gpu-tpu/SKILL.md",
+      "hash": "706f73fa33d18d53f907851421078494912e613a485ee62d88d273696d3bc34f",
+      "bytes": 6505
+    },
+    {
+      "name": "gke-ai-troubleshooting-jobset-interruption",
+      "path": "skills/cloud/gke-ai-troubleshooting-jobset-interruption/SKILL.md",
+      "hash": "597115bc05f125cae446b866c76c78b841dea9e65d80a57f0870b0cd8667ab7e",
+      "bytes": 11027
+    },
+    {
+      "name": "gke-ai-troubleshooting-tpu-vbar-oom",
+      "path": "skills/cloud/gke-ai-troubleshooting-tpu-vbar-oom/SKILL.md",
+      "hash": "92762cce7dd9d0d090ec4c8524dac875564f5a825fa5b990d44afbeb81dbb170",
+      "bytes": 6358
+    },
+    {
+      "name": "gke-app-onboarding",
+      "path": "skills/cloud/gke-app-onboarding/SKILL.md",
+      "hash": "d9133859907df3df3d4cce82f7d8cb8cf0f9a9a87e5e78d25fc252c4ccc2d32a",
+      "bytes": 4779
+    },
+    {
+      "name": "gke-backup-dr",
+      "path": "skills/cloud/gke-backup-dr/SKILL.md",
+      "hash": "1be50c499c059b37622a40ca49e7eace0ad80a36ad09973f25ca34d459c1d710",
+      "bytes": 3054
+    },
+    {
+      "name": "gke-basics",
+      "path": "skills/cloud/gke-basics/SKILL.md",
+      "hash": "750b49e99a3352e7076730bebf85b00f947d3d64ee43460e48afb847b80f8445",
+      "bytes": 3654
+    },
+    {
+      "name": "gke-batch-hpc",
+      "path": "skills/cloud/gke-batch-hpc/SKILL.md",
+      "hash": "87fdaa157499136591a1f4870e8e02d8443111e938d7decc70d7b71ffca2f965",
+      "bytes": 5678
+    },
+    {
+      "name": "gke-cluster-autoscaler",
+      "path": "skills/cloud/gke-cluster-autoscaler/SKILL.md",
+      "hash": "361f144202dfa152103c1d5cbafc7967a4a1c2c4ba61252a55efafe39cb21616",
+      "bytes": 11394
+    },
+    {
+      "name": "gke-cluster-creation",
+      "path": "skills/cloud/gke-cluster-creation/SKILL.md",
+      "hash": "44c2501b4a932584f326f7cfd796f9bf3e088f958f8998f663d3af678d3d06b1",
+      "bytes": 12439
+    },
+    {
+      "name": "gke-compute-classes",
+      "path": "skills/cloud/gke-compute-classes/SKILL.md",
+      "hash": "229307c017b3b58d72ffc7b4a3cf71a70ff86356a0e56332847e952684078070",
+      "bytes": 20992
+    },
+    {
+      "name": "gke-cost-analysis",
+      "path": "skills/cloud/gke-cost-analysis/SKILL.md",
+      "hash": "0c7f585ff39ea2cb2c130fc4bde4ab7887cf421aaeb5c90b7b6ac891deaff66d",
+      "bytes": 7875
+    },
+    {
+      "name": "gke-cost-optimization",
+      "path": "skills/cloud/gke-cost-optimization/SKILL.md",
+      "hash": "4c493aaae3028ba673aaefa24440c6dd9cfff511cfd625829c1063c5c1b62c2e",
+      "bytes": 10100
+    },
+    {
+      "name": "gke-golden-path",
+      "path": "skills/cloud/gke-golden-path/SKILL.md",
+      "hash": "cde697d8955512338969078944fe6d1306bc9a88251ac25914849d2fa7f3aa60",
+      "bytes": 6039
+    },
+    {
+      "name": "gke-inference",
+      "path": "skills/cloud/gke-inference/SKILL.md",
+      "hash": "050cda071d12fba3239f6c0402ebddd27bc41f9a4651970e299dc8dea3faa586",
+      "bytes": 7526
+    },
+    {
+      "name": "gke-manifest-generation",
+      "path": "skills/cloud/gke-manifest-generation/SKILL.md",
+      "hash": "315636d307489f03f7f119a098f746fa81ec0eb8a6acddd274996d4bcfeb724e",
+      "bytes": 12346
+    },
+    {
+      "name": "gke-multitenancy",
+      "path": "skills/cloud/gke-multitenancy/SKILL.md",
+      "hash": "7f868beb75f778f204707b5f45bcf0eaae54aabcd267657f2a2f7aa9ca6b729c",
+      "bytes": 5360
+    },
+    {
+      "name": "gke-networking",
+      "path": "skills/cloud/gke-networking/SKILL.md",
+      "hash": "5e8361041f5c3bbdd75d6d9a0f0f9e394309248def58d1074c95786e9a5c5689",
+      "bytes": 5948
+    },
+    {
+      "name": "gke-observability",
+      "path": "skills/cloud/gke-observability/SKILL.md",
+      "hash": "c658a93e5a761739cf8c04e6b06cf7fdcec75400b814836ce5010164c49d204f",
+      "bytes": 10553
+    },
+    {
+      "name": "gke-platform-security",
+      "path": "skills/cloud/gke-platform-security/SKILL.md",
+      "hash": "45373badf6116a008b9ea6e4056146e7cb9a9113bf71ad2d55d035919a744464",
+      "bytes": 9841
+    },
+    {
+      "name": "gke-productionize",
+      "path": "skills/cloud/gke-productionize/SKILL.md",
+      "hash": "d4a28a8e311975a378b20af632508b6756e959ff5f6f228f9a20f1905608dd70",
+      "bytes": 5392
+    },
+    {
+      "name": "gke-reliability",
+      "path": "skills/cloud/gke-reliability/SKILL.md",
+      "hash": "1c300cb14a2431a0a4c42e98feaf6b41414932a856df42dd387a285f52fb62a1",
+      "bytes": 6941
+    },
+    {
+      "name": "gke-service-networking",
+      "path": "skills/cloud/gke-service-networking/SKILL.md",
+      "hash": "a94983d97d1a368dd99559f6326706dd7ca82ad787ce3278d4d18a606ac8f77c",
+      "bytes": 6110
+    },
+    {
+      "name": "gke-storage",
+      "path": "skills/cloud/gke-storage/SKILL.md",
+      "hash": "aa0b9e7f6dfa831e7753de4cf0ad02829f8cc73959250e4438480282ddf35816",
+      "bytes": 4901
+    },
+    {
+      "name": "gke-tpu-dynamic-slices-monitoring",
+      "path": "skills/cloud/gke-tpu-dynamic-slices-monitoring/SKILL.md",
+      "hash": "f70e877fff66f1d43f3ec7f4af3107b9704b2c27671f073f93fdd44331df3466",
+      "bytes": 9678
+    },
+    {
+      "name": "gke-tpu-metrics-monitoring",
+      "path": "skills/cloud/gke-tpu-metrics-monitoring/SKILL.md",
+      "hash": "e073840ef083695daea9ae75bbbafb69c8c48b38b753b15d7c3427a732340602",
+      "bytes": 7050
+    },
+    {
+      "name": "gke-upgrades",
+      "path": "skills/cloud/gke-upgrades/SKILL.md",
+      "hash": "fc2955296cb4df8e428a29b217e30f76a04099fdc49cd8c27d53796358af7bff",
+      "bytes": 17810
+    },
+    {
+      "name": "gke-workload-scaling",
+      "path": "skills/cloud/gke-workload-scaling/SKILL.md",
+      "hash": "cca5bf26a2d776283ae871f52bafe60e84d3bdf200c6aa9260a1ae4fe27cbcdf",
+      "bytes": 4994
+    },
+    {
+      "name": "gke-workload-security",
+      "path": "skills/cloud/gke-workload-security/SKILL.md",
+      "hash": "95054149f3b23dce49ee1198fc43ea5649dd82ad216fdc77121710864c44cb8e",
+      "bytes": 7516
+    },
+    {
+      "name": "gke-workload-troubleshooting",
+      "path": "skills/cloud/gke-workload-troubleshooting/SKILL.md",
+      "hash": "7d3d070a9450e6e8486ef1bfaccfd9a455e848ee4a310a6674e4d7c635838dbe",
+      "bytes": 10466
+    },
+    {
+      "name": "google-agents-cli-onboarding",
+      "path": "skills/cloud/google-agents-cli-onboarding/SKILL.md",
+      "hash": "fd48e52bd47e3b1102ebac7cb5ba6e49f60753b6a19ea316bb27c95690e5a1f8",
+      "bytes": 4018
+    },
+    {
+      "name": "google-cloud-global-frontend-configuration",
+      "path": "skills/cloud/google-cloud-global-frontend-configuration/SKILL.md",
+      "hash": "467d3c5fa311f36299a5faafdb1f8e3587fa5be868f1fb4cd0b24fbe2ab9ae36",
+      "bytes": 10325
+    },
+    {
+      "name": "google-cloud-networking-observability",
+      "path": "skills/cloud/google-cloud-networking-observability/SKILL.md",
+      "hash": "422ae42e67923deae55aaaf74dab82f169eba9397d265af2dc88faccc77781b4",
+      "bytes": 7632
+    },
+    {
+      "name": "google-cloud-recipe-auth",
+      "path": "skills/cloud/google-cloud-recipe-auth/SKILL.md",
+      "hash": "0edd4ee0bca72b4aee98ea3400c232243a58a4f0a6cd59dc2a492e61640b5b2a",
+      "bytes": 12219
+    },
+    {
+      "name": "google-cloud-recipe-foundation-builder",
+      "path": "skills/cloud/google-cloud-recipe-foundation-builder/SKILL.md",
+      "hash": "ae444bdb224430da2634d303460a23cec036827b440452afe6b65c8172b0e988",
+      "bytes": 19259
+    },
+    {
+      "name": "google-cloud-recipe-onboarding",
+      "path": "skills/cloud/google-cloud-recipe-onboarding/SKILL.md",
+      "hash": "ed91252f2d46566f8ba366e74f6e3b83205836009c54a48955c4c2b9e4854e02",
+      "bytes": 12644
+    },
+    {
+      "name": "google-cloud-slo-alert-configuration",
+      "path": "skills/cloud/google-cloud-slo-alert-configuration/SKILL.md",
+      "hash": "0068c5321833becfe5cb33030efaf07384e76aea13a94527c83a938554774bc0",
+      "bytes": 11546
+    },
+    {
+      "name": "google-cloud-solution-agentic-ai-bidirectional-streaming",
+      "path": "skills/cloud/google-cloud-solution-agentic-ai-bidirectional-streaming/SKILL.md",
+      "hash": "da57fba5030251c2ee5ce8b1d87b0f4260a8ba1ae8fcecdf9c31c3f34242e1df",
+      "bytes": 9217
+    },
+    {
+      "name": "google-cloud-solution-agentic-ai-borderless-data-lakehouse",
+      "path": "skills/cloud/google-cloud-solution-agentic-ai-borderless-data-lakehouse/SKILL.md",
+      "hash": "a071c6629006e558174a77a0f45f59fa0e8712ef78b79ba3c3cc67877795d80a",
+      "bytes": 9904
+    },
+    {
+      "name": "google-cloud-solution-agentic-ai-data-science-workflow",
+      "path": "skills/cloud/google-cloud-solution-agentic-ai-data-science-workflow/SKILL.md",
+      "hash": "d30aebec3470f2faff9e2cd9ce11f4da4a796c6fc60dd97f931bf09c04757602",
+      "bytes": 10224
+    },
+    {
+      "name": "google-cloud-solution-agentic-analytics-spark-knowledge-catalog",
+      "path": "skills/cloud/google-cloud-solution-agentic-analytics-spark-knowledge-catalog/SKILL.md",
+      "hash": "786b479a33d74cfdde014e7430119b45bf2146f6df81aff0f6979215821fa861",
+      "bytes": 17526
+    },
+    {
+      "name": "google-cloud-solution-architecture",
+      "path": "skills/cloud/google-cloud-solution-architecture/SKILL.md",
+      "hash": "16e2bf9386c766a70d3453716901e8f7c59fdf9faa8207b7e428095d1082f236",
+      "bytes": 13530
+    },
+    {
+      "name": "google-cloud-solution-build-deploy-agents",
+      "path": "skills/cloud/google-cloud-solution-build-deploy-agents/SKILL.md",
+      "hash": "b313086d1792bd526f1a93fc2704ea678510eac0fea59d4639717a0b72f2c49f",
+      "bytes": 13806
+    },
+    {
+      "name": "google-cloud-solution-guided-gke-ai-migration",
+      "path": "skills/cloud/google-cloud-solution-guided-gke-ai-migration/SKILL.md",
+      "hash": "e48bc7200349e5d7045dce326e018316a9b6856953e9b35844774517df485f89",
+      "bytes": 33148
+    },
+    {
+      "name": "google-cloud-solution-n-tier-serverless-web-app",
+      "path": "skills/cloud/google-cloud-solution-n-tier-serverless-web-app/SKILL.md",
+      "hash": "44e65d31539cd255ff31424754b16e993ecf09f5c098c274d717f972b5560589",
+      "bytes": 16274
+    },
+    {
+      "name": "google-cloud-solution-rag-enterprise-search-gke-sqldb",
+      "path": "skills/cloud/google-cloud-solution-rag-enterprise-search-gke-sqldb/SKILL.md",
+      "hash": "41f2ca9f7b28702ffea0cacb48cb121864453abf27f9afbdd82f8eb62526fc91",
+      "bytes": 15904
+    },
+    {
+      "name": "google-cloud-storage-basics",
+      "path": "skills/cloud/google-cloud-storage-basics/SKILL.md",
+      "hash": "878c19d08e0796351bbf088778e9a69c56f2c41675dcdf78648a60693819c0e3",
+      "bytes": 7834
+    },
+    {
+      "name": "google-cloud-waf-cost-optimization",
+      "path": "skills/cloud/google-cloud-waf-cost-optimization/SKILL.md",
+      "hash": "3ff42b6532c35829a3a6ab9465a6258e334f1d20b244c2e07228ccf95b55d27a",
+      "bytes": 10422
+    },
+    {
+      "name": "google-cloud-waf-operational-excellence",
+      "path": "skills/cloud/google-cloud-waf-operational-excellence/SKILL.md",
+      "hash": "519aaf57bfacf495f594c46c50726361422c4483bf84adce6e647137e95657d7",
+      "bytes": 6921
+    },
+    {
+      "name": "google-cloud-waf-performance-optimization",
+      "path": "skills/cloud/google-cloud-waf-performance-optimization/SKILL.md",
+      "hash": "03e6b3e523712cad48dc62e09804250c241fc34e88c18aa81a7d5b2aada7759a",
+      "bytes": 7318
+    },
+    {
+      "name": "google-cloud-waf-reliability",
+      "path": "skills/cloud/google-cloud-waf-reliability/SKILL.md",
+      "hash": "a8ebafc1aa138a5d13544e352abe9454bb48859fcc41520d57547a0796cbdc8b",
+      "bytes": 8078
+    },
+    {
+      "name": "google-cloud-waf-security",
+      "path": "skills/cloud/google-cloud-waf-security/SKILL.md",
+      "hash": "e5dc59635a2e6a3d720495f81ea89beeb3c05e76acb6479928a675dfa8466ded",
+      "bytes": 16740
+    },
+    {
+      "name": "google-cloud-waf-sustainability",
+      "path": "skills/cloud/google-cloud-waf-sustainability/SKILL.md",
+      "hash": "f270005fb37adb04b3579d1f2c262506a77831e9e8977a050f2eeb755e08d1e9",
+      "bytes": 13293
+    },
+    {
+      "name": "managed-airflow-migrations",
+      "path": "skills/cloud/managed-airflow-migrations/SKILL.md",
+      "hash": "45d3a35dedd6c1e1cd27c058e9ec43e87e403a49f713470d3c0ecc13363255d2",
+      "bytes": 11907
+    },
+    {
+      "name": "spanner-basics",
+      "path": "skills/cloud/spanner-basics/SKILL.md",
+      "hash": "69360a0086f0b65d4c2b0f4c3050ca79acb04b1b74e184254fc076b98d062c55",
+      "bytes": 3246
+    },
+    {
+      "name": "workload-manager-basics",
+      "path": "skills/cloud/workload-manager-basics/SKILL.md",
+      "hash": "81312f7c506d2aaf2ae9b01d0f78173f9f845ee04428edb3944d938481583d18",
+      "bytes": 6935
+    }
+  ]
+}

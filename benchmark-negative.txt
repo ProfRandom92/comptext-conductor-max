@@ -1,0 +1,1 @@
+Diagnose and fix a deterministic stale ctref invalidation bug in CompText Conductor Max. Add the smallest regression test and run the relevant verification suite.
