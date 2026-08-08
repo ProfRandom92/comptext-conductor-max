@@ -53,6 +53,7 @@ class ContextBroker:
         changed_files: set[str] | None = None,
         failure_files: set[str] | None = None,
         critical_paths: set[str] | None = None,
+        preferred_paths: set[str] | None = None,
     ) -> SearchResponse:
         before = self.cache.status()
         index = self.indexer.build()
@@ -62,31 +63,47 @@ class ContextBroker:
         for _ in range(max(0, after.misses - before.misses)):
             self.stats.record_cache(hit=False)
         response = self.retriever.search(
-            index, query, max_results=max_results, max_lines=max_lines, budget_tokens=budget_tokens,
-            changed_files=changed_files, failure_files=failure_files, critical_paths=critical_paths,
+            index,
+            query,
+            max_results=max_results,
+            max_lines=max_lines,
+            budget_tokens=budget_tokens,
+            changed_files=changed_files,
+            failure_files=failure_files,
+            critical_paths=critical_paths,
+            preferred_paths=preferred_paths,
         )
         for _ in response.results:
             self.stats.record_read(full=False)
-        raw_text = "\n".join(item.text for item in index.slices)
+        raw_bytes = sum(len(item.text.encode("utf-8")) for item in index.slices)
         returned_text = "\n".join(item.snippet for item in response.results)
-        raw_tokens = estimate_tokens(raw_text)
-        returned_tokens = estimate_tokens(returned_text)
+        returned_bytes = len(returned_text.encode("utf-8"))
         self.stats.record_context(
-            raw_bytes=len(raw_text.encode("utf-8")),
-            returned_bytes=len(returned_text.encode("utf-8")),
-            raw_tokens=raw_tokens.value,
-            returned_tokens=returned_tokens.value,
+            raw_bytes=raw_bytes,
+            returned_bytes=returned_bytes,
+            raw_tokens=(raw_bytes + 3) // 4,
+            returned_tokens=estimate_tokens(returned_text).value,
             context_budget=budget_tokens,
             retrieval_results=len(response.results),
         )
         return response
 
-    def search(self, query: str, *, max_results: int = 5, max_lines: int = 180, budget_tokens: int = 18_000) -> SearchResponse:
+    def search(
+        self,
+        query: str,
+        *,
+        max_results: int = 5,
+        max_lines: int = 180,
+        budget_tokens: int = 18_000,
+    ) -> SearchResponse:
         bounded_results = min(20, max(1, max_results))
         bounded_lines = min(1_000, max(1, max_lines))
         bounded_budget = min(30_000, max(1, budget_tokens))
         return self._index_and_search(
-            query, max_results=bounded_results, max_lines=bounded_lines, budget_tokens=bounded_budget
+            query,
+            max_results=bounded_results,
+            max_lines=bounded_lines,
+            budget_tokens=bounded_budget,
         )
 
     def context(
@@ -105,7 +122,8 @@ class ContextBroker:
         failures: set[str] = set()
         try:
             diff = self.git.summarize(self.root)
-            changed.update(diff.source_files); changed.update(diff.test_files)
+            changed.update(diff.source_files)
+            changed.update(diff.test_files)
             self.stats.record_diff(raw_bytes=diff.raw_bytes, returned_bytes=0)
         except RuntimeError:
             pass
@@ -114,6 +132,12 @@ class ContextBroker:
             state.spec_path.relative_to(self.root).as_posix(),
             state.plan_path.relative_to(self.root).as_posix(),
         }
+        preferred = {
+            path.relative_to(self.root).as_posix() for path in state.project_context_paths
+        }
+        for path in (state.metadata_path, state.index_path):
+            if path is not None:
+                preferred.add(path.relative_to(self.root).as_posix())
         response = self._index_and_search(
             query,
             max_results=12,
@@ -122,6 +146,7 @@ class ContextBroker:
             changed_files=changed,
             failure_files=failures,
             critical_paths=critical,
+            preferred_paths=preferred,
         )
         blocks = [
             f"## {item.path}:{item.start_line}-{item.end_line}\n{item.snippet}"
@@ -130,8 +155,13 @@ class ContextBroker:
         content = "\n\n".join(blocks)
         count = estimate_tokens(content)
         return BrokerContext(
-            track=track, current_step=state.current_step, task=task, content=content, returned_tokens=count,
-            budget=hard_limit, budget_exceeded=response.budget_exceeded or count.value > hard_limit,
+            track=track,
+            current_step=state.current_step,
+            task=task,
+            content=content,
+            returned_tokens=count,
+            budget=hard_limit,
+            budget_exceeded=response.budget_exceeded or count.value > hard_limit,
             omitted_critical=response.omitted_critical,
         )
 
@@ -157,10 +187,13 @@ class ContextBroker:
             "test_files": list(summary.test_files),
             "generated_omitted": list(summary.generated_omitted),
             "binary_omitted": list(summary.binary_omitted),
-            "hunks": [{"hunk_id": hunk.hunk_id, "path": hunk.path} for hunk in summary.hunks],
+            "hunks": [
+                {"hunk_id": hunk.hunk_id, "path": hunk.path} for hunk in summary.hunks
+            ],
             "raw_bytes": summary.raw_bytes,
         }
         import json
+
         returned_bytes = len(json.dumps(payload, sort_keys=True).encode("utf-8"))
         payload["returned_bytes"] = returned_bytes
         payload["avoided_bytes"] = max(0, summary.raw_bytes - returned_bytes)
