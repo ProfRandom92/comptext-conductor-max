@@ -45,6 +45,32 @@ class ContextBroker:
         self.git = GitDiffEngine()
         self.results = ResultAnalyzer()
 
+    def _record_cache_delta(self, before_hits: int, before_misses: int) -> None:
+        after = self.cache.status()
+        for _ in range(max(0, after.hits - before_hits)):
+            self.stats.record_cache(hit=True)
+        for _ in range(max(0, after.misses - before_misses)):
+            self.stats.record_cache(hit=False)
+
+    def _record_search_stats(
+        self,
+        response: SearchResponse,
+        *,
+        raw_bytes: int,
+        budget_tokens: int,
+    ) -> None:
+        for _ in response.results:
+            self.stats.record_read(full=False)
+        returned_text = "\n".join(item.snippet for item in response.results)
+        self.stats.record_context(
+            raw_bytes=raw_bytes,
+            returned_bytes=len(returned_text.encode("utf-8")),
+            raw_tokens=(raw_bytes + 3) // 4,
+            returned_tokens=estimate_tokens(returned_text).value,
+            context_budget=budget_tokens,
+            retrieval_results=len(response.results),
+        )
+
     def _index_and_search(
         self,
         query: str,
@@ -59,11 +85,7 @@ class ContextBroker:
     ) -> SearchResponse:
         before = self.cache.status()
         index = self.indexer.build()
-        after = self.cache.status()
-        for _ in range(max(0, after.hits - before.hits)):
-            self.stats.record_cache(hit=True)
-        for _ in range(max(0, after.misses - before.misses)):
-            self.stats.record_cache(hit=False)
+        self._record_cache_delta(before.hits, before.misses)
         response = self.retriever.search(
             index,
             query,
@@ -75,34 +97,43 @@ class ContextBroker:
             critical_paths=critical_paths,
             preferred_paths=preferred_paths,
         )
-        for _ in response.results:
-            self.stats.record_read(full=False)
         raw_bytes = sum(len(item.text.encode("utf-8")) for item in index.slices)
-        returned_text = "\n".join(item.snippet for item in response.results)
-        returned_bytes = len(returned_text.encode("utf-8"))
-        self.stats.record_context(
-            raw_bytes=raw_bytes,
-            returned_bytes=returned_bytes,
-            raw_tokens=(raw_bytes + 3) // 4,
-            returned_tokens=estimate_tokens(returned_text).value,
-            context_budget=budget_tokens,
-            retrieval_results=len(response.results),
-        )
+        self._record_search_stats(response, raw_bytes=raw_bytes, budget_tokens=budget_tokens)
         return response
 
     def search(
         self,
-        query: str,
+        query: str | None = None,
         *,
+        ref: str | None = None,
         max_results: int = 5,
         max_lines: int = 180,
         budget_tokens: int = 18_000,
     ) -> SearchResponse:
+        if (query is None) == (ref is None):
+            raise ValueError("provide exactly one of query or ref")
         bounded_results = min(20, max(1, max_results))
         bounded_lines = min(1_000, max(1, max_lines))
         bounded_budget = min(30_000, max(1, budget_tokens))
+        if ref is not None:
+            before = self.cache.status()
+            index = self.indexer.build()
+            self._record_cache_delta(before.hits, before.misses)
+            response = self.retriever.expand_ref(
+                index,
+                ref,
+                max_lines=bounded_lines,
+                budget_tokens=bounded_budget,
+            )
+            raw_bytes = sum(len(item.text.encode("utf-8")) for item in index.slices)
+            self._record_search_stats(
+                response,
+                raw_bytes=raw_bytes,
+                budget_tokens=bounded_budget,
+            )
+            return response
         return self._index_and_search(
-            query,
+            query or "",
             max_results=bounded_results,
             max_lines=bounded_lines,
             budget_tokens=bounded_budget,
