@@ -40,8 +40,9 @@ def test_antigravity_plugin_bundle_matches_current_schema():
     root = Path(__file__).resolve().parents[1]
     plugin = json.loads((root / "plugin.json").read_text(encoding="utf-8"))
     mcp = json.loads((root / "mcp_config.json").read_text(encoding="utf-8"))
+    assert plugin["$schema"] == "https://antigravity.google/schemas/v1/plugin.json"
     assert plugin["name"] == "comptext-conductor-max"
-    assert set(plugin) == {"name", "description"}
+    assert set(plugin) == {"$schema", "name", "description"}
     server = mcp["mcpServers"]["comptext-conductor-max"]
     assert server["command"] == "ct-conductor-mcp"
     assert server["args"] == []
@@ -50,6 +51,19 @@ def test_antigravity_plugin_bundle_matches_current_schema():
     skill = (root / "skills" / "conductor-max" / "SKILL.md").read_text(encoding="utf-8")
     assert all(name in skill for name in ("SAFE", "BALANCED", "MAX", "ct_context", "ct_search", "ct_result"))
     assert len(skill) < 7000
+
+
+def test_context_researcher_is_compact_sandboxed_subagent():
+    root = Path(__file__).resolve().parents[1]
+    agent = (root / "agents" / "context-researcher" / "agent.md").read_text(encoding="utf-8")
+    assert "name: context-researcher" in agent
+    assert "mainAgent: false" in agent
+    assert "subagent: true" in agent
+    assert "model: flash" in agent
+    assert "commandExecutionPolicy: sandbox" in agent
+    assert "tools:" not in agent
+    assert all(name in agent for name in ("ct_context", "ct_search", "ct_diff", "ct_result"))
+    assert len(agent) < 4000
 
 
 def test_rule_prefers_broker_but_keeps_correctness_fallback():
