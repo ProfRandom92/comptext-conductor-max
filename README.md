@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="docs/assets/brand/readme-header.svg" alt="CompText Conductor Max — Compute before context" width="100%" />
+  <img src="docs/assets/brand/conductor-max-readme-hero.webp" alt="CompText Conductor Max — Compute before context" width="100%" />
 </p>
 
 <p align="center">
