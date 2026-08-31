@@ -1,0 +1,53 @@
+name: ci
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - feature/context-broker-mcp
+
+permissions:
+  contents: read
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install project and quality tools
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e '.[dev]' bandit pip-audit
+
+      - name: Tests
+        run: pytest -q
+
+      - name: Ruff
+        run: ruff check .
+
+      - name: MyPy
+        run: mypy src
+
+      - name: Build
+        run: python -m build
+
+      - name: Synthetic benchmark
+        run: |
+          ct-conductor benchmark --output /tmp/v0.2-benchmark.json --seed 20260807
+          cat /tmp/v0.2-benchmark.json
+
+      - name: Bandit
+        run: bandit -q -r src -ll
+
+      - name: Dependency audit
+        run: pip-audit --skip-editable

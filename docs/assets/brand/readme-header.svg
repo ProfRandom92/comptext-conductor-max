@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="460" viewBox="0 0 1600 460" role="img" aria-labelledby="title desc">
+  <title id="title">CompText Conductor Max</title>
+  <desc id="desc">CompText Conductor Max README hero: local-first deterministic context broker with the tagline Compute before context.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#040713"/>
+      <stop offset="0.55" stop-color="#070b19"/>
+      <stop offset="1" stop-color="#090512"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#19d8ff"/>
+      <stop offset="0.42" stop-color="#3087ff"/>
+      <stop offset="0.72" stop-color="#8754ff"/>
+      <stop offset="1" stop-color="#d54cff"/>
+    </linearGradient>
+    <linearGradient id="brand2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#1ee7f2"/>
+      <stop offset="0.52" stop-color="#4b9dff"/>
+      <stop offset="1" stop-color="#ae5bff"/>
+    </linearGradient>
+    <radialGradient id="flare">
+      <stop offset="0" stop-color="#fff6dc"/>
+      <stop offset="0.12" stop-color="#ffb34a" stop-opacity=".95"/>
+      <stop offset="0.45" stop-color="#ff7b2f" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#ff7b2f" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#183252" stroke-opacity=".18" stroke-width="1"/>
+    </pattern>
+    <filter id="glow" x="-60%" y="-60%" width="220%" height="220%">
+      <feGaussianBlur stdDeviation="9" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="22"/></filter>
+  </defs>
+
+  <rect width="1600" height="460" rx="28" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1598" height="458" rx="27" fill="none" stroke="#2e6ca0" stroke-opacity=".30"/>
+  <rect width="1600" height="460" rx="28" fill="url(#grid)" opacity=".38"/>
+
+  <circle cx="1300" cy="110" r="190" fill="#4e2ca8" opacity=".12" filter="url(#soft)"/>
+  <circle cx="1130" cy="180" r="180" fill="#007bc1" opacity=".11" filter="url(#soft)"/>
+
+  <g transform="translate(72 78)">
+    <path d="M0 0h64l48 48L92 68 47 23H0z" fill="#18cfff"/>
+    <path d="M112 0h64l-47 47-23-22z" fill="#20d7ff"/>
+    <path d="M48 78l24-23 39 39-24 24z" fill="#6d62ff"/>
+    <path d="M106 101l23-23 48 48h-64z" fill="#9848f5"/>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="300" y="118" fill="#f6f8fb" font-size="68" font-weight="680" letter-spacing="12">COMPTEXT</text>
+    <text x="302" y="173" fill="url(#brand2)" font-size="35" font-weight="650" letter-spacing="13">CONDUCTOR MAX</text>
+    <text x="302" y="223" fill="#97a9bf" font-size="18" font-weight="520" letter-spacing="4">CONTEXT BROKER MCP FOR ANTIGRAVITY &amp; CONDUCTOR</text>
+  </g>
+
+  <g transform="translate(305 276)" font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="0" y="0" fill="url(#brand2)" font-size="35" font-weight="690">Compute before context.</text>
+    <text x="0" y="48" fill="#d8e0eb" font-size="25" font-weight="480">Only send what matters.</text>
+    <text x="0" y="92" fill="#73869e" font-size="18" font-weight="500" letter-spacing="1.6">LOCAL-FIRST  •  DETERMINISTIC  •  BOUNDED  •  VERIFIABLE</text>
+  </g>
+
+  <g transform="translate(1010 92)" fill="none" stroke-linecap="round">
+    <path d="M0 120C64 20 164 20 245 120C325 218 420 218 485 120C420 22 325 22 245 120C164 218 64 218 0 120" stroke="#173d6d" stroke-width="38" opacity=".28" filter="url(#soft)"/>
+    <path d="M0 120C64 20 164 20 245 120C325 218 420 218 485 120C420 22 325 22 245 120C164 218 64 218 0 120" stroke="url(#brand)" stroke-width="10" filter="url(#glow)"/>
+    <path d="M0 120C64 20 164 20 245 120C325 218 420 218 485 120C420 22 325 22 245 120C164 218 64 218 0 120" stroke="#d8f7ff" stroke-opacity=".42" stroke-width="2"/>
+    <circle cx="245" cy="120" r="65" fill="url(#flare)" opacity=".9"/>
+    <circle cx="245" cy="120" r="5" fill="#fff" filter="url(#glow)"/>
+  </g>
+
+  <g transform="translate(1010 356)" font-family="Inter,Segoe UI,Arial,sans-serif" font-size="15" font-weight="620">
+    <rect x="0" y="0" width="145" height="40" rx="20" fill="#071622" stroke="#159ad0" stroke-opacity=".55"/>
+    <text x="72.5" y="25" text-anchor="middle" fill="#63dbff">LOCAL-FIRST</text>
+    <rect x="158" y="0" width="158" height="40" rx="20" fill="#0a1125" stroke="#6754dc" stroke-opacity=".55"/>
+    <text x="237" y="25" text-anchor="middle" fill="#a68cff">6 MCP TOOLS</text>
+    <rect x="329" y="0" width="170" height="40" rx="20" fill="#101022" stroke="#9051dc" stroke-opacity=".55"/>
+    <text x="414" y="25" text-anchor="middle" fill="#c578ff">SHA-256</text>
+  </g>
+
+  <path d="M55 416H1545" stroke="url(#brand2)" stroke-width="1" opacity=".33"/>
+</svg>

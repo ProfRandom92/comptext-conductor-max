@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="180" viewBox="0 0 1600 180" role="img" aria-labelledby="title desc">
+  <title id="title">CompText Conductor Max footer</title>
+  <desc id="desc">Branded README footer for CompText Conductor Max.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#050915"/>
+      <stop offset=".5" stop-color="#080b18"/>
+      <stop offset="1" stop-color="#090512"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#20def6"/>
+      <stop offset=".55" stop-color="#4a90ff"/>
+      <stop offset="1" stop-color="#a65bff"/>
+    </linearGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="7"/></filter>
+  </defs>
+  <rect width="1600" height="180" rx="24" fill="url(#bg)"/>
+  <rect x="1" y="1" width="1598" height="178" rx="23" fill="none" stroke="#264e74" stroke-opacity=".32"/>
+  <path d="M40 30H1560" stroke="url(#brand)" stroke-width="1" opacity=".32"/>
+
+  <g transform="translate(60 58)">
+    <path d="M0 0h28l22 22-10 10L18 10H0z" fill="#18cfff"/>
+    <path d="M50 0h28L57 21 47 11z" fill="#20d7ff"/>
+    <path d="M20 35l10-10 18 18-10 10z" fill="#6d62ff"/>
+    <path d="M47 45l10-10 22 22H51z" fill="#9848f5"/>
+  </g>
+
+  <g font-family="Inter,Segoe UI,Arial,sans-serif">
+    <text x="165" y="86" fill="#f4f7fb" font-size="31" font-weight="650" letter-spacing="6">COMPTEXT</text>
+    <text x="166" y="118" fill="url(#brand)" font-size="17" font-weight="650" letter-spacing="7">CONDUCTOR MAX</text>
+    <text x="520" y="96" fill="#7f93aa" font-size="15" font-weight="600" letter-spacing="2.0">LOCAL-FIRST  •  BOUNDED  •  DETERMINISTIC  •  SHA-256</text>
+    <text x="1288" y="94" fill="url(#brand)" font-size="24" font-weight="700">Compute before context.</text>
+  </g>
+  <circle cx="1280" cy="88" r="4" fill="#31ddf7"/>
+  <circle cx="1280" cy="88" r="14" fill="#31ddf7" opacity=".18" filter="url(#glow)"/>
+</svg>

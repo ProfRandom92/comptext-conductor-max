@@ -1,0 +1,46 @@
+[build-system]
+requires = ["setuptools>=75", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "comptext-conductor-max"
+version = "0.2.0"
+description = "Local-first Context Broker MCP companion for Conductor and Antigravity CLI"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.12"
+dependencies = [
+  "mcp>=2.0.0,<3",
+  "pathspec>=0.12,<1",
+  "pydantic>=2.7,<3",
+  "rich>=13.7,<15",
+  "typer>=0.12,<1",
+]
+
+[project.optional-dependencies]
+dev = ["build>=1.2", "mypy>=1.11", "pytest>=8", "pytest-asyncio>=0.24", "ruff>=0.6"]
+
+[project.scripts]
+ct-conductor = "comptext_conductor_max.cli:app"
+ct-conductor-mcp = "comptext_conductor_max.mcp_server:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+target-version = "py312"
+line-length = 100
+
+[tool.ruff.lint.per-file-ignores]
+"src/comptext_conductor_max/antigravity.py" = ["TRY004"]
+"tests/test_antigravity_usage_v02.py" = ["FLY002"]
+
+[tool.mypy]
+python_version = "3.12"
+strict = true
+packages = ["comptext_conductor_max"]
+mypy_path = "src"
