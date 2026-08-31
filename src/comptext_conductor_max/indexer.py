@@ -66,6 +66,7 @@ class RepositoryIndexer:
 
     def build(self) -> RepositoryIndex:
         slices: list[IndexedSlice] = []
+        truncated_paths: list[str] = []
         files = 0
         for path in sorted(self.root.rglob("*"), key=lambda item: item.as_posix()):
             if not path.is_file() or path.is_symlink():
@@ -81,18 +82,23 @@ class RepositoryIndexer:
                 stat = path.stat()
             except OSError:
                 continue
+            is_truncated = stat.st_size > self.max_file_bytes
             stat_key = (
                 f"index-stat:v1:{rel}:{stat.st_size}:{stat.st_mtime_ns}:"
                 f"{self.window_lines}:{self.max_file_bytes}"
             )
             stat_cached = self.cache.get(stat_key)
             if isinstance(stat_cached, list):
+                if is_truncated:
+                    truncated_paths.append(rel)
                 files += 1
                 slices.extend(IndexedSlice.model_validate(item) for item in stat_cached)
                 continue
             text = self.policy.safe_text(path, self.max_file_bytes)
             if text is None:
                 continue
+            if is_truncated:
+                truncated_paths.append(rel)
             files += 1
             content_hash = hashlib.sha256(text.encode("utf-8")).hexdigest()
             content_key = f"index:v2:{rel}:{content_hash}:{self.window_lines}"
@@ -124,4 +130,9 @@ class RepositoryIndexer:
             self.cache.put(content_key, serialized)
             self.cache.put(stat_key, serialized)
             slices.extend(file_slices)
-        return RepositoryIndex(root=str(self.root), slices=tuple(slices), file_count=files)
+        return RepositoryIndex(
+            root=str(self.root),
+            slices=tuple(slices),
+            file_count=files,
+            truncated_paths=tuple(sorted(set(truncated_paths))),
+        )

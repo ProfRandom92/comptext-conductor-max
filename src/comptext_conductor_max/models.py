@@ -19,3 +19,4 @@ class RepositoryIndex(BaseModel):
     root: str
     slices: tuple[IndexedSlice, ...]
     file_count: int
+    truncated_paths: tuple[str, ...] = ()
