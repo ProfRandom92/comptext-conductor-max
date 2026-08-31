@@ -18,13 +18,13 @@
 </p>
 
 <p align="center">
-  <a href="#why-conductor-max">Why</a> ·
+  <a href="#problem">Why</a> ·
   <a href="#verified-main-state">Evidence</a> ·
   <a href="#architecture">Architecture</a> ·
   <a href="#benchmark-snapshot">Benchmark</a> ·
-  <a href="#mcp-surface">MCP tools</a> ·
-  <a href="#security--trust-boundary">Security</a> ·
-  <a href="#install">Install</a>
+  <a href="#mcp-tool-matrix">MCP tools</a> ·
+  <a href="#security">Security</a> ·
+  <a href="#installation">Install</a>
 </p>
 
 ---
@@ -47,7 +47,7 @@
 
 > Benchmark figures in this README are reproducible synthetic-fixture measurements, not universal savings guarantees. Real Antigravity host-token savings require equivalent authenticated A/B workloads and are not claimed here.
 
-## Why Conductor Max
+## Problem
 
 Agentic coding systems are often forced to spend expensive model context on work that is deterministic and local:
 
@@ -113,7 +113,7 @@ flowchart LR
     REF --> MODEL["Minimal useful model context"]
 ```
 
-### Compute-before-context pipeline
+### Compute before context
 
 ```mermaid
 flowchart TD
@@ -131,7 +131,7 @@ flowchart TD
 
 Conductor is **not forked**. Its project and track files are detected and consumed read-only. The broker remains local-first and does not require a remote indexing service, embeddings database or telemetry backend.
 
-## MCP surface
+## MCP tool matrix
 
 The permanent MCP schema intentionally stays small: **six primary tools**.
 
@@ -176,7 +176,7 @@ Those repairs were proven with regression-first TDD and revalidated on the final
 
 SHA-256 is used for deterministic identity, cache invalidation, checkpoint identity and benchmark provenance. It is **not** presented as digital-signature authenticity, encryption or PKI.
 
-## Security & trust boundary
+## Security
 
 Default behavior is local-only. The broker:
 
@@ -226,7 +226,7 @@ conductor/
 
 The broker prioritizes the current unchecked plan step, critical spec/plan material, relevant project context, changed code, recent failures and checkpoint state instead of blindly injecting every available document.
 
-## Install
+## Installation
 
 Requires Python 3.12+ and Git.
 
@@ -248,7 +248,7 @@ ct-conductor
 ct-conductor-mcp
 ```
 
-### Antigravity companion
+### Antigravity setup
 
 The companion bundle follows the Antigravity plugin shape used by this project:
 
@@ -268,7 +268,19 @@ ct-conductor agy-probe --root /path/to/project
 
 The probe understands terminal `stream-json` usage fields but does not convert synthetic benchmark measurements into real-host savings claims.
 
-## Development gates
+## Troubleshooting
+
+**`ct_diff` reports unavailable:** confirm the project is a Git worktree and `git` is on `PATH`.
+
+**A `ctref` is stale:** rerun `ct_search(query=...)`. Refs intentionally bind to content identity and do not silently follow changed files.
+
+**A file is missing from search:** check `.gitignore`, `.comptextignore`, secret/binary classification and generated-content detection. Oversized indexed files are reported via `truncated_paths`.
+
+**Large command output:** redirect it to a local project log and call `ct_result(log_path=...)` so raw noise never has to enter model context first.
+
+**MCP starts in the wrong directory:** set `CT_CONDUCTOR_ROOT` to the active project root or configure the MCP server `cwd`.
+
+## Development
 
 Primary local checks:
 
