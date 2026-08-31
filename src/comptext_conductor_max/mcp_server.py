@@ -44,6 +44,7 @@ def create_server(root: Path | None = None) -> MCPServer:
             "budget": result.budget,
             "budget_exceeded": result.budget_exceeded,
             "omitted_critical": list(result.omitted_critical),
+            "truncated_paths": list(result.truncated_paths),
         }
 
     @server.tool(
@@ -77,6 +78,7 @@ def create_server(root: Path | None = None) -> MCPServer:
             "returned_tokens": asdict(response.returned_tokens),
             "budget_exceeded": response.budget_exceeded,
             "omitted_critical": list(response.omitted_critical),
+            "truncated_paths": list(response.truncated_paths),
         }
 
     @server.tool(
