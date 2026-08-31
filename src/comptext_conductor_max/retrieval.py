@@ -42,6 +42,7 @@ class SearchResponse:
     returned_tokens: TokenCount
     budget_exceeded: bool
     omitted_critical: tuple[str, ...]
+    truncated_paths: tuple[str, ...] = ()
 
 
 class Retriever:
@@ -160,6 +161,7 @@ class Retriever:
                 returned_tokens=TokenCount(0, False, "estimated_tokens"),
                 budget_exceeded=True,
                 omitted_critical=(item.path,),
+                truncated_paths=index.truncated_paths,
             )
         result = SearchResult(
             path=item.path,
@@ -178,6 +180,7 @@ class Retriever:
             returned_tokens=fitted.tokens,
             budget_exceeded=False,
             omitted_critical=(),
+            truncated_paths=index.truncated_paths,
         )
 
     def search(
@@ -269,4 +272,5 @@ class Retriever:
             ),
             budget_exceeded=bool(omitted_critical),
             omitted_critical=tuple(sorted(set(omitted_critical))),
+            truncated_paths=index.truncated_paths,
         )
