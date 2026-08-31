@@ -20,6 +20,17 @@ def _repo(root: Path) -> None:
     (root / "unrelated.txt").write_text(("unrelated typography colors\n" * 500), encoding="utf-8")
 
 
+def _skill(root: Path, name: str, description: str, body: str) -> Path:
+    skill = root / ".agents" / "skills" / name
+    skill.mkdir(parents=True)
+    skill_md = skill / "SKILL.md"
+    skill_md.write_text(
+        f"---\nname: {name}\ndescription: {description}\n---\n{body}\n",
+        encoding="utf-8",
+    )
+    return skill_md
+
+
 def _init_git_repo(root: Path) -> None:
     subprocess.run(["git", "init", "-b", "main"], cwd=root, check=True, capture_output=True)
     subprocess.run(["git", "config", "user.email", "test@example.invalid"], cwd=root, check=True)
@@ -69,6 +80,34 @@ async def test_search_result_ref_can_be_expanded_without_a_seventh_tool(tmp_path
         assert expanded_payload["results"][0]["ref"] == ref
         assert expanded_payload["results"][0]["path"] == payload["results"][0]["path"]
         assert expanded_payload["results"][0]["reasons"] == ["reference"]
+
+
+@pytest.mark.asyncio
+async def test_selected_skill_l2_ctref_round_trip_and_stale_invalidation(tmp_path: Path):
+    _repo(tmp_path)
+    skill_md = _skill(
+        tmp_path,
+        "trace-observability",
+        "Telemetry guidance for service health",
+        "OpenTelemetry spans bodymarker preserve this exact instruction.",
+    )
+    query = "telemetry OpenTelemetry spans bodymarker"
+    async with Client(create_server(tmp_path)) as client:
+        searched = await client.call_tool("ct_search", {"query": query, "max_results": 10})
+        assert searched.is_error is False
+        results = (searched.structured_content or {})["results"]
+        instruction = next(item for item in results if "bodymarker" in item["snippet"])
+        expanded = await client.call_tool("ct_search", {"ref": instruction["ref"], "max_lines": 20})
+        assert expanded.is_error is False
+        expanded_result = (expanded.structured_content or {})["results"][0]
+        assert expanded_result["ref"] == instruction["ref"]
+        assert expanded_result["snippet"] == instruction["snippet"]
+        skill_md.write_text(
+            "---\nname: trace-observability\ndescription: Telemetry guidance for service health\n---\nChanged instruction body.\n",
+            encoding="utf-8",
+        )
+        stale = await client.call_tool("ct_search", {"ref": instruction["ref"]})
+        assert stale.is_error is True
 
 
 @pytest.mark.asyncio

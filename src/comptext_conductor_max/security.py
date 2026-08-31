@@ -3,7 +3,6 @@ from __future__ import annotations
 import fnmatch
 import re
 from pathlib import Path
-from typing import Any
 
 from pathspec import PathSpec
 
@@ -41,7 +40,7 @@ _SECRET_PATTERNS = (
 
 
 class SecurityPolicy:
-    def __init__(self, root: Path, ignore_spec: PathSpec[Any]) -> None:
+    def __init__(self, root: Path, ignore_spec: PathSpec) -> None:
         self.root = root.resolve()
         self.ignore_spec = ignore_spec
 

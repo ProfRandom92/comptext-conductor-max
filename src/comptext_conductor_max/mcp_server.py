@@ -7,6 +7,7 @@ from typing import Any, Literal
 
 from mcp.server import MCPServer
 
+from . import __version__
 from .broker import ContextBroker
 from .checkpoints import Checkpoint
 from .config import ProfileName
@@ -21,7 +22,7 @@ def create_server(root: Path | None = None) -> MCPServer:
             "Prefer bounded broker tools for repository context, diffs, and logs; "
             "expand only when correctness requires it."
         ),
-        version="0.3.0",
+        version=__version__,
     )
 
     @server.tool(

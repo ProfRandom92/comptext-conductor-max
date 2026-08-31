@@ -6,6 +6,8 @@ on:
     branches:
       - main
       - feature/context-broker-mcp
+      - feature/skill-aware-context-runtime
+      - fix/v0.3.1-stabilization
 
 permissions:
   contents: read
@@ -40,6 +42,9 @@ jobs:
 
       - name: Build
         run: python -m build
+
+      - name: Version consistency and routing golden corpus
+        run: pytest -q tests/test_v031_stabilization.py
 
       - name: Synthetic benchmark
         run: |
