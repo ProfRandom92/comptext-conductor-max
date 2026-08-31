@@ -42,6 +42,7 @@ class ResultAnalyzer:
         raw_bytes = len(raw.encode("utf-8"))
         digest = hashlib.sha256(raw.encode("utf-8")).hexdigest()
         relevant: list[str] = []
+        safe_lines: list[str] = []
         files: set[str] = set()
         passed: int | None = None
         failed: int | None = None
@@ -50,6 +51,7 @@ class ResultAnalyzer:
         for line in raw.splitlines():
             if SecurityPolicy.contains_secret(line):
                 continue
+            safe_lines.append(line)
             for match in _FILE.finditer(line):
                 files.add(match.group("path").replace("\\", "/"))
             if passed_match := _PASSED.search(line):
@@ -62,8 +64,8 @@ class ResultAnalyzer:
                 actual = actual_match.group(1).strip()
             if _IMPORTANT.search(line):
                 relevant.append(line)
-        if not relevant and raw:
-            relevant = raw.splitlines()[-max_lines:]
+        if not relevant and safe_lines:
+            relevant = safe_lines[-max_lines:]
         relevant = relevant[: max(0, max_lines)]
         returned = "\n".join(relevant)
         return ResultSummary(

@@ -63,6 +63,15 @@ class GitDiffEngine:
             range_args = [f"{base}..{head}"]
         elif base:
             range_args = [base]
+        else:
+            try:
+                self._run(root, "rev-parse", "--verify", "HEAD")
+            except RuntimeError:
+                range_args = []
+            else:
+                # Compare the full working tree to HEAD so both staged and
+                # unstaged tracked changes are represented in one coherent diff.
+                range_args = ["HEAD"]
         numstat = self._run(root, "diff", "--no-ext-diff", "--numstat", *range_args)
         patch = self._run(root, "diff", "--no-ext-diff", "--unified=3", *range_args)
         additions = 0
