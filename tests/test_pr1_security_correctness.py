@@ -5,6 +5,7 @@ from comptext_conductor_max.cache import ContentCache
 from comptext_conductor_max.gitops import GitDiffEngine
 from comptext_conductor_max.indexer import RepositoryIndexer
 from comptext_conductor_max.results import ResultAnalyzer
+from comptext_conductor_max.retrieval import Retriever
 from comptext_conductor_max.security import SecurityPolicy
 
 
@@ -34,6 +35,9 @@ def test_large_file_index_reports_truncation_explicitly(tmp_path: Path):
     ).build()
     assert hasattr(index, "truncated_paths"), "oversized files must be surfaced explicitly"
     assert index.truncated_paths == ("src/large.py",)
+    response = Retriever().search(index, "value", max_results=1, max_lines=8, budget_tokens=100)
+    assert hasattr(response, "truncated_paths"), "search callers must see partial-index provenance"
+    assert response.truncated_paths == ("src/large.py",)
 
 
 def test_staged_changes_are_visible_in_default_diff_summary(tmp_path: Path):
