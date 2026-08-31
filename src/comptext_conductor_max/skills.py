@@ -204,6 +204,7 @@ class SkillCatalog:
 
     def build_skill_index(self, query_or_task: str | None = None) -> RepositoryIndex:
         skills = self.discover_skills()
+        selected = {item.name for item in self.rank_skills(query_or_task or "", skills)}
         slices: list[IndexedSlice] = []
         for meta in skills:
             # L1 Metadata slice
@@ -222,7 +223,6 @@ class SkillCatalog:
             )
 
             # L2 instructions are admitted only after bounded routing selection.
-            selected = {item.name for item in self.rank_skills(query_or_task or "", skills)}
             if meta.name in selected:
                 instruction = self.get_skill_instruction(meta.name)
                 if not instruction:

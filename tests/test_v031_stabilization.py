@@ -71,8 +71,8 @@ def test_routing_golden_corpus(tmp_path: Path) -> None:
     _skill(
         tmp_path,
         "trace-observability",
-        "Observe distributed service health",
-        "OpenTelemetry spans trace request latency and propagation.",
+        "Telemetry guidance for service health",
+        "OpenTelemetry spans bodymarker trace request latency and propagation.",
     )
     catalog = SkillCatalog(external_roots=(tmp_path,))
     skills = catalog.discover_skills()
@@ -80,13 +80,23 @@ def test_routing_golden_corpus(tmp_path: Path) -> None:
     assert {
         s.name for s in catalog.rank_skills("deploy API and migrate database schema", skills)
     } == {"deploy-api", "database-migration"}
-    assert [
-        s.name
-        for s in catalog.rank_skills("improve observability with OpenTelemetry spans", skills)
-    ] == ["trace-observability"]
+    body_query = "telemetry OpenTelemetry spans bodymarker"
+    metadata_score = 15  # one metadata token match: telemetry
+    assert 0 < metadata_score < 25
+    assert [s.name for s in catalog.rank_skills(body_query, skills)] == ["trace-observability"]
+    control_root = tmp_path / "no-body-evidence"
+    control_root.mkdir()
+    _skill(
+        control_root,
+        "trace-observability-control",
+        "Telemetry guidance for service health",
+        "Run unrelated canary checks.",
+    )
+    control = SkillCatalog(external_roots=(control_root,))
+    assert control.rank_skills(body_query, control.discover_skills()) == ()
     assert catalog.rank_skills("write a poem about mountain sunrise", skills) == ()
     assert catalog.rank_skills("repair a bicycle chain", skills) == ()
-    index = catalog.build_skill_index("improve observability with OpenTelemetry spans")
+    index = catalog.build_skill_index(body_query)
     assert [item.kind for item in index.slices].count("skill_instruction") == 1
 
 
