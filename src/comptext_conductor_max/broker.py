@@ -29,6 +29,7 @@ class BrokerContext:
     budget: int
     budget_exceeded: bool
     omitted_critical: tuple[str, ...]
+    truncated_paths: tuple[str, ...] = ()
 
 
 class ContextBroker:
@@ -95,6 +96,9 @@ class ContextBroker:
             root=repo_index.root,
             slices=all_slices,
             file_count=repo_index.file_count + skill_index.file_count,
+            truncated_paths=tuple(
+                sorted(set(repo_index.truncated_paths + skill_index.truncated_paths))
+            ),
         )
         self._record_cache_delta(before.hits, before.misses)
         response = self.retriever.search(
@@ -170,6 +174,9 @@ class ContextBroker:
                 root=repo_index.root,
                 slices=all_slices,
                 file_count=repo_index.file_count + skill_index.file_count,
+                truncated_paths=tuple(
+                    sorted(set(repo_index.truncated_paths + skill_index.truncated_paths))
+                ),
             )
             self._record_cache_delta(before.hits, before.misses)
             response = self.retriever.expand_ref(
@@ -265,6 +272,7 @@ class ContextBroker:
             budget=hard_limit,
             budget_exceeded=response.budget_exceeded or count.value > hard_limit,
             omitted_critical=response.omitted_critical,
+            truncated_paths=response.truncated_paths,
         )
 
     def diff(self, hunk_id: str | None = None, *, max_lines: int = 400) -> dict[str, Any]:
