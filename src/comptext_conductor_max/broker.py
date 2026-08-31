@@ -28,6 +28,7 @@ class BrokerContext:
     budget: int
     budget_exceeded: bool
     omitted_critical: tuple[str, ...]
+    truncated_paths: tuple[str, ...] = ()
 
 
 class ContextBroker:
@@ -214,6 +215,7 @@ class ContextBroker:
             budget=hard_limit,
             budget_exceeded=response.budget_exceeded or count.value > hard_limit,
             omitted_critical=response.omitted_critical,
+            truncated_paths=response.truncated_paths,
         )
 
     def diff(self, hunk_id: str | None = None, *, max_lines: int = 400) -> dict[str, Any]:
