@@ -45,8 +45,6 @@ def parse_skill_frontmatter(skill_md_path: Path, is_trusted: bool = False) -> Sk
         return None
 
     frontmatter_text = match.group(1)
-    body_text = match.group(2).strip()
-
     try:
         data = yaml.safe_load(frontmatter_text)
     except yaml.YAMLError:
@@ -75,7 +73,8 @@ def parse_skill_frontmatter(skill_md_path: Path, is_trusted: bool = False) -> Sk
         source_path=str(skill_md_path.resolve()),
         content_hash=content_hash,
         is_trusted=is_trusted,
-        body_text=body_text,
+        # L1 discovery must remain metadata-only. Instructions are loaded only after routing.
+        body_text=None,
     )
 
 
@@ -148,6 +147,13 @@ class SkillCatalog:
             score += name_overlap * 30
             score += desc_overlap * 15
 
+            # Stage 2 is intentionally bounded to L1-promising candidates only. It lets
+            # instruction terminology disambiguate a metadata match without putting every
+            # SKILL.md body in the generic retrieval pool.
+            if 0 < score < threshold:
+                body = self.get_skill_instruction(meta.name) or ""
+                body_overlap = len(query_tokens & set(re.findall(r"[a-z0-9]+", body.lower())))
+                score += body_overlap * 8
             if score >= threshold:
                 scored.append((score, meta))
 
@@ -161,7 +167,12 @@ class SkillCatalog:
             meta = self._cache.get(skill_name)
         if not meta:
             return None
-        return meta.body_text
+        try:
+            content = Path(meta.source_path).read_text(encoding="utf-8")
+        except (OSError, UnicodeDecodeError):
+            return None
+        match = _FRONTMATTER_RE.match(content)
+        return match.group(2).strip() if match else None
 
     def get_skill_resource(self, skill_name: str, resource_rel_path: str) -> str | None:
         meta = self._cache.get(skill_name)
@@ -191,7 +202,7 @@ class SkillCatalog:
                 return None
         return None
 
-    def build_skill_index(self) -> RepositoryIndex:
+    def build_skill_index(self, query_or_task: str | None = None) -> RepositoryIndex:
         skills = self.discover_skills()
         slices: list[IndexedSlice] = []
         for meta in skills:
@@ -210,15 +221,19 @@ class SkillCatalog:
                 )
             )
 
-            # L2 Instruction slice
-            if meta.body_text:
-                i_hash = hashlib.sha256(meta.body_text.encode("utf-8")).hexdigest()
+            # L2 instructions are admitted only after bounded routing selection.
+            selected = {item.name for item in self.rank_skills(query_or_task or "", skills)}
+            if meta.name in selected:
+                instruction = self.get_skill_instruction(meta.name)
+                if not instruction:
+                    continue
+                i_hash = hashlib.sha256(instruction.encode("utf-8")).hexdigest()
                 slices.append(
                     IndexedSlice(
                         path=meta.source_path,
                         start_line=6,
-                        end_line=6 + len(meta.body_text.splitlines()),
-                        text=meta.body_text,
+                        end_line=6 + len(instruction.splitlines()),
+                        text=instruction,
                         content_hash=i_hash,
                         kind="skill_instruction",
                         symbols=(meta.name,),

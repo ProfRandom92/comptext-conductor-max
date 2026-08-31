@@ -87,9 +87,10 @@ class ContextBroker:
     ) -> SearchResponse:
         before = self.cache.status()
         repo_index = self.indexer.build()
-        skill_index = self.skills.build_skill_index()
+        skill_index = self.skills.build_skill_index(query)
         all_slices = repo_index.slices + skill_index.slices
         from .models import RepositoryIndex
+
         index = RepositoryIndex(
             root=repo_index.root,
             slices=all_slices,
@@ -109,7 +110,7 @@ class ContextBroker:
         )
         raw_bytes = sum(len(item.text.encode("utf-8")) for item in index.slices)
         self._record_search_stats(response, raw_bytes=raw_bytes, budget_tokens=budget_tokens)
-        
+
         # Skill telemetry tracking
         discovered = self.skills.discover_skills()
         selected_skills = [
@@ -119,13 +120,19 @@ class ContextBroker:
             len(item.text.encode("utf-8")) for item in index.slices if item.kind == "skill_metadata"
         )
         returned_meta = sum(
-            len(r.snippet.encode("utf-8")) for r in response.results if "skill-metadata" in r.reasons
+            len(r.snippet.encode("utf-8"))
+            for r in response.results
+            if "skill-metadata" in r.reasons
         )
         returned_instr = sum(
-            len(r.snippet.encode("utf-8")) for r in response.results if "skill-instruction" in r.reasons
+            len(r.snippet.encode("utf-8"))
+            for r in response.results
+            if "skill-instruction" in r.reasons
         )
         returned_res = sum(
-            len(r.snippet.encode("utf-8")) for r in response.results if "skill-resource" in r.reasons
+            len(r.snippet.encode("utf-8"))
+            for r in response.results
+            if "skill-resource" in r.reasons
         )
         self.stats.record_skills(
             discovered=len(discovered),
@@ -158,6 +165,7 @@ class ContextBroker:
             skill_index = self.skills.build_skill_index()
             all_slices = repo_index.slices + skill_index.slices
             from .models import RepositoryIndex
+
             index = RepositoryIndex(
                 root=repo_index.root,
                 slices=all_slices,
@@ -215,9 +223,7 @@ class ContextBroker:
             state.spec_path.relative_to(self.root).as_posix(),
             state.plan_path.relative_to(self.root).as_posix(),
         }
-        preferred = {
-            path.relative_to(self.root).as_posix() for path in state.project_context_paths
-        }
+        preferred = {path.relative_to(self.root).as_posix() for path in state.project_context_paths}
         for path in (state.metadata_path, state.index_path):
             if path is not None:
                 preferred.add(path.relative_to(self.root).as_posix())
@@ -283,9 +289,7 @@ class ContextBroker:
             "test_files": list(summary.test_files),
             "generated_omitted": list(summary.generated_omitted),
             "binary_omitted": list(summary.binary_omitted),
-            "hunks": [
-                {"hunk_id": hunk.hunk_id, "path": hunk.path} for hunk in summary.hunks
-            ],
+            "hunks": [{"hunk_id": hunk.hunk_id, "path": hunk.path} for hunk in summary.hunks],
             "raw_bytes": summary.raw_bytes,
         }
         import json
