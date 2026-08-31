@@ -14,7 +14,7 @@ from typing import Any
 
 from comptext_conductor_max import __version__
 
-EXTERNAL_SKILLS_PATH = Path(r"C:\\Users\\contr\\dev\\external\\google-skills")
+EXTERNAL_SKILLS_PATH = Path(r"C:\Users\contr\dev\external\google-skills")
 MIN_VALID_TRIALS = 3
 TOKEN_FIELDS = (
     "input_tokens",
